@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史洞察 - 黄金看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .insight-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .insight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .insight-title {
+            font-size: 1.3em;
+            color: #ffd700;
+        }
+        
+        .insight-subtitle {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.6);
+            margin-top: 5px;
+        }
+        
+        .latest-value {
+            font-size: 1.5em;
+            color: #4ade80;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+        
+        .description {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.7);
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+        
+        .source {
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.5);
+            margin-top: 10px;
+        }
+        
+        .dual-axis-container {
+            position: relative;
+            height: 450px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            padding: 10px 20px;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            color: #ffd700;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,215,0,0.2);
+            border-color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 历史洞察</h1>
+            <p class="subtitle">黄金的长期视角与跨资产对比</p>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">实时价格</a>
+                <a href="prices.html" class="nav-link">价格走势</a>
+                <a href="insights.html" class="nav-link active">历史洞察</a>
+            </div>
+        </header>
+        
+        <!-- 标普500/黄金比率 -->
+        <div class="insight-section" id="sp500-gold-ratio">
+            <div class="insight-header">
+                <div>
+                    <div class="insight-title">标普500 / 黄金比率</div>
+                    <div class="insight-subtitle">1927 – 至今</div>
+                </div>
+                <div class="latest-value" id="sp500-gold-latest">加载中...</div>
+            </div>
+            <div class="chart-container">
+                <canvas id="sp500GoldChart"></canvas>
+            </div>
+            <div class="description">
+                用标普500指数除以每盎司金价。比率上升意味着股票跑赢黄金，下降意味着黄金跑赢股票。
+                这是衡量「风险资产 vs 避险资产」相对强弱的经典指标。
+                2000年互联网泡沫和2021年后均出现趋势性转折。
+            </div>
+            <div class="source">数据来源：Yahoo Finance (SPY, GC=F) | FRED (^GSPC 历史数据)</div>
+        </div>
+        
+        <!-- 金银比 -->
+        <div class="insight-section" id="gold-silver-ratio">
+            <div class="insight-header">
+                <div>
+                    <div class="insight-title">金银比</div>
+                    <div class="insight-subtitle">1915 – 至今</div>
+                </div>
+                <div class="latest-value" id="gold-silver-latest">加载中...</div>
+            </div>
+            <div class="chart-container">
+                <canvas id="goldSilverRatioChart"></canvas>
+            </div>
+            <div class="description">
+                买一盎司黄金需要多少盎司白银。长期均值约 60，超过 80 通常被视为白银相对低估或经济衰退信号（2020年3月曾飙至 120+）。
+                低于 50 则暗示工业需求旺盛或投机热情高涨。
+            </div>
+            <div class="source">数据来源：Macrotrends (历史数据) | Yahoo Finance (GC=F, SI=F)</div>
+        </div>
+        
+        <!-- 金价 vs 银价 -->
+        <div class="insight-section" id="gold-vs-silver">
+            <div class="insight-header">
+                <div>
+                    <div class="insight-title">金价 vs 银价</div>
+                    <div class="insight-subtitle">1915 – 至今</div>
+                </div>
+                <div>
+                    <div style="color: #ffd700;">金价 <span id="gold-price">加载中...</span></div>
+                    <div style="color: #c0c0c0;">银价 <span id="silver-price">加载中...</span></div>
+                </div>
+            </div>
+            <div class="dual-axis-container">
+                <canvas id="goldSilverPriceChart"></canvas>
+            </div>
+            <div class="description">
+                黄金与白银价格走势对比。白银兼具贵金属和工业金属属性，波动率更大。
+                牛市后期白银往往加速追赶黄金（「穷人的黄金」效应），是判断贵金属牛市阶段的参考。
+            </div>
+            <div class="source">数据来源：Yahoo Finance (GC=F, SI=F) | Macrotrends (历史数据)</div>
+        </div>
+    </div>
+    
+    <script>
+        // 图表通用配置
+        Chart.defaults.color = 'rgba(255,255,255,0.7)';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+        
+        // 格式化数字
+        function formatNumber(num, decimals = 2) {
+            if (!num || isNaN(num)) return 'N/A';
+            return num.toFixed(decimals);
+        }
+        
+        // 加载 JSON 数据
+        async function loadData(filename) {
+            try {
+                const response = await fetch(`data/${filename}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error(`加载 ${filename} 失败:`, error);
+                return null;
+            }
+        }
+        
+        // 1. 标普500/黄金比率
+        async function initSP500GoldRatio() {
+            const data = await loadData('SP500_GOLD_RATIO.json');
+            if (!data || !data.observations) return;
+            
+            const chartData = data.observations
+                .filter(d => d.value !== null && d.value !== '.')
+                .map(d => ({
+                    x: new Date(d.date),
+                    y: parseFloat(d.value)
+                }));
+            
+            const latestValue = chartData[chartData.length - 1]?.y;
+            document.getElementById('sp500-gold-latest').textContent = formatNumber(latestValue);
+            
+            new Chart(document.getElementById('sp500GoldChart'), {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: '标普500/黄金比率',
+                        data: chartData,
+                        borderColor: '#4ade80',
+                        backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `比率: ${formatNumber(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'year', displayFormats: { year: 'yyyy' } },
+                            title: { display: true, text: '年份' }
+                        },
+                        y: {
+                            title: { display: true, text: '比率' },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 2. 金银比
+        async function initGoldSilverRatio() {
+            const data = await loadData('GOLD_SILVER_RATIO.json');
+            if (!data || !data.observations) return;
+            
+            const chartData = data.observations
+                .filter(d => d.value !== null && d.value !== '.')
+                .map(d => ({
+                    x: new Date(d.date),
+                    y: parseFloat(d.value)
+                }));
+            
+            const latestValue = chartData[chartData.length - 1]?.y;
+            document.getElementById('gold-silver-latest').textContent = formatNumber(latestValue);
+            
+            // 添加均值线
+            const avgValue = 60;
+            
+            new Chart(document.getElementById('goldSilverRatioChart'), {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: '金银比',
+                        data: chartData,
+                        borderColor: '#ffd700',
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }, {
+                        label: '长期均值 (60)',
+                        data: chartData.map(d => ({ x: d.x, y: avgValue })),
+                        borderColor: 'rgba(255,255,255,0.3)',
+                        borderWidth: 1,
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${formatNumber(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'year', displayFormats: { year: 'yyyy' } },
+                            title: { display: true, text: '年份' }
+                        },
+                        y: {
+                            title: { display: true, text: '金银比' },
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 3. 金价 vs 银价（双轴）
+        async function initGoldSilverPrice() {
+            const goldData = await loadData('GOLD_FUTURES.json');
+            const silverData = await loadData('SILVER_FUTURES.json');
+            
+            if (!goldData || !silverData) return;
+            
+            const goldPrices = goldData.observations
+                .filter(d => d.value !== null && d.value !== '.')
+                .map(d => ({
+                    x: new Date(d.date),
+                    y: parseFloat(d.value)
+                }));
+            
+            const silverPrices = silverData.observations
+                .filter(d => d.value !== null && d.value !== '.')
+                .map(d => ({
+                    x: new Date(d.date),
+                    y: parseFloat(d.value)
+                }));
+            
+            const latestGold = goldPrices[goldPrices.length - 1]?.y;
+            const latestSilver = silverPrices[silverPrices.length - 1]?.y;
+            
+            document.getElementById('gold-price').textContent = `$${formatNumber(latestGold)}`;
+            document.getElementById('silver-price').textContent = `$${formatNumber(latestSilver)}`;
+            
+            new Chart(document.getElementById('goldSilverPriceChart'), {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: '金价 (美元/盎司)',
+                        data: goldPrices,
+                        borderColor: '#ffd700',
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        borderWidth: 2,
+                        yAxisID: 'y',
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }, {
+                        label: '银价 (美元/盎司)',
+                        data: silverPrices,
+                        borderColor: '#c0c0c0',
+                        backgroundColor: 'rgba(192, 192, 192, 0.1)',
+                        borderWidth: 2,
+                        yAxisID: 'y1',
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: $${formatNumber(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'year', displayFormats: { year: 'yyyy' } },
+                            title: { display: true, text: '年份' }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: '金价 (美元)', color: '#ffd700' },
+                            ticks: { color: '#ffd700' },
+                            grid: { color: 'rgba(255,215,0,0.1)' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: '银价 (美元)', color: '#c0c0c0' },
+                            ticks: { color: '#c0c0c0' },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 初始化所有图表
+        async function init() {
+            await Promise.all([
+                initSP500GoldRatio(),
+                initGoldSilverRatio(),
+                initGoldSilverPrice()
+            ]);
+        }
+        
+        init();
+    </script>
+</body>
+</html>

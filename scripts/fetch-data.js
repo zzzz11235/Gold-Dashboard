@@ -363,6 +363,140 @@ async function main() {
     console.log('✅ GOLD_USD (兼容旧版) 已保存\n');
   }
   
+  // ========== 历史洞察数据 ==========
+  
+  // 4. 获取白银期货 (SI=F)
+  const silverFuturesData = await fetchGoldData('SI=F', {
+    id: 'SILVER_FUTURES',
+    name_zh: '白银期货',
+    name_en: 'Silver Futures (SI=F)',
+    unit: '美元/盎司',
+    description: '纽约商品交易所(COMEX)白银期货连续合约',
+    notes: '白银兼具贵金属和工业金属属性，波动率高于黄金'
+  });
+  
+  if (silverFuturesData) {
+    fs.writeFileSync(
+      path.join(DATA_DIR, 'SILVER_FUTURES.json'),
+      JSON.stringify(silverFuturesData, null, 2)
+    );
+    results.success.push('SILVER_FUTURES');
+    console.log('✅ SILVER_FUTURES (SI=F) 已保存\n');
+  } else {
+    results.failed.push('SILVER_FUTURES');
+  }
+  
+  // 5. 获取标普500指数 (^GSPC)
+  const sp500Data = await fetchGoldData('^GSPC', {
+    id: 'SP500_INDEX',
+    name_zh: '标普500指数',
+    name_en: 'S&P 500 Index (^GSPC)',
+    unit: '指数点',
+    description: '标准普尔500指数，追踪美国500家最大上市公司',
+    notes: '美国股市基准指数，反映整体市场表现'
+  });
+  
+  if (sp500Data) {
+    fs.writeFileSync(
+      path.join(DATA_DIR, 'SP500_INDEX.json'),
+      JSON.stringify(sp500Data, null, 2)
+    );
+    results.success.push('SP500_INDEX');
+    console.log('✅ SP500_INDEX (^GSPC) 已保存\n');
+  } else {
+    results.failed.push('SP500_INDEX');
+  }
+  
+  // 6. 计算金银比 (Gold/Silver Ratio)
+  if (goldFuturesData && silverFuturesData) {
+    const goldSilverRatio = {
+      id: 'GOLD_SILVER_RATIO',
+      name_zh: '金银比',
+      name_en: 'Gold/Silver Ratio',
+      unit: '倍数',
+      section: '历史洞察',
+      direction: 'neutral',
+      thresholds: null,
+      
+      metadata: {
+        source: 'Calculated from Yahoo Finance (GC=F / SI=F)',
+        source_url: 'https://finance.yahoo.com',
+        description: '买一盎司黄金需要多少盎司白银',
+        update_frequency: '每日',
+        historical_mean: 60,
+        notes: '长期均值约60，超过80为白银低估或衰退信号，低于50为工业需求旺盛'
+      },
+      
+      updated: new Date().toISOString().split('T')[0],
+      latest: {
+        date: goldFuturesData.latest.date,
+        value: goldFuturesData.latest.value / silverFuturesData.latest.value
+      },
+      series: goldFuturesData.series.map((item, i) => ({
+        date: item.date,
+        value: item.value / (silverFuturesData.series[i]?.value || item.value)
+      })).filter((item, i) => silverFuturesData.series[i] && silverFuturesData.series[i].value > 0)
+    };
+    
+    // 计算变化和百分位
+    goldSilverRatio.changes = calculateChanges(goldSilverRatio.series);
+    goldSilverRatio.percentiles = calculatePercentiles(goldSilverRatio.series);
+    
+    fs.writeFileSync(
+      path.join(DATA_DIR, 'GOLD_SILVER_RATIO.json'),
+      JSON.stringify(goldSilverRatio, null, 2)
+    );
+    results.success.push('GOLD_SILVER_RATIO');
+    console.log(`✅ GOLD_SILVER_RATIO 已保存 (最新: ${goldSilverRatio.latest.value.toFixed(2)})\n`);
+  } else {
+    results.failed.push('GOLD_SILVER_RATIO');
+    console.log('⚠️  无法计算金银比（缺少黄金或白银数据）\n');
+  }
+  
+  // 7. 计算标普500/黄金比率
+  if (sp500Data && goldFuturesData) {
+    const sp500GoldRatio = {
+      id: 'SP500_GOLD_RATIO',
+      name_zh: '标普500/黄金比率',
+      name_en: 'S&P 500 / Gold Ratio',
+      unit: '倍数',
+      section: '历史洞察',
+      direction: 'neutral',
+      thresholds: null,
+      
+      metadata: {
+        source: 'Calculated from Yahoo Finance (^GSPC / GC=F)',
+        source_url: 'https://finance.yahoo.com',
+        description: '标普500指数除以金价，衡量股票 vs 避险资产相对强弱',
+        update_frequency: '每日',
+        notes: '比率上升=股票跑赢黄金，下降=黄金跑赢股票'
+      },
+      
+      updated: new Date().toISOString().split('T')[0],
+      latest: {
+        date: sp500Data.latest.date,
+        value: sp500Data.latest.value / goldFuturesData.latest.value
+      },
+      series: sp500Data.series.map((item, i) => ({
+        date: item.date,
+        value: item.value / (goldFuturesData.series[i]?.value || item.value)
+      })).filter((item, i) => goldFuturesData.series[i] && goldFuturesData.series[i].value > 0)
+    };
+    
+    sp500GoldRatio.changes = calculateChanges(sp500GoldRatio.series);
+    sp500GoldRatio.percentiles = calculatePercentiles(sp500GoldRatio.series);
+    
+    fs.writeFileSync(
+      path.join(DATA_DIR, 'SP500_GOLD_RATIO.json'),
+      JSON.stringify(sp500GoldRatio, null, 2)
+    );
+    results.success.push('SP500_GOLD_RATIO');
+    console.log(`✅ SP500_GOLD_RATIO 已保存 (最新: ${sp500GoldRatio.latest.value.toFixed(2)})\n`);
+  } else {
+    results.failed.push('SP500_GOLD_RATIO');
+    console.log('⚠️  无法计算标普500/黄金比率（缺少数据）\n');
+  }
+  
   // 4. 获取所有 FRED 指标
   for (const [seriesId, config] of Object.entries(FRED_SERIES)) {
     const data = await generateIndicatorJSON(seriesId, config);
