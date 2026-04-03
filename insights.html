@@ -89,15 +89,23 @@
     </style>
 </head>
 <body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">📊</span>
+            <span class="nav-title">黄金看板</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">总览</a>
+            <a href="prices.html" class="nav-link">金价走势</a>
+            <a href="insights.html" class="nav-link active">历史洞察</a>
+        </div>
+    </nav>
+    
     <div class="container">
         <header>
             <h1>📊 历史洞察</h1>
             <p class="subtitle">黄金的长期视角与跨资产对比</p>
-            <div class="nav-links">
-                <a href="index.html" class="nav-link">实时价格</a>
-                <a href="prices.html" class="nav-link">价格走势</a>
-                <a href="insights.html" class="nav-link active">历史洞察</a>
-            </div>
         </header>
         
         <!-- 标普500/黄金比率 -->
@@ -188,10 +196,10 @@
         // 1. 标普500/黄金比率
         async function initSP500GoldRatio() {
             const data = await loadData('SP500_GOLD_RATIO.json');
-            if (!data || !data.observations) return;
+            if (!data || !data.series) return;
             
-            const chartData = data.observations
-                .filter(d => d.value !== null && d.value !== '.')
+            const chartData = data.series
+                .filter(d => d.value !== null && d.value !== '.' && !isNaN(d.value))
                 .map(d => ({
                     x: new Date(d.date),
                     y: parseFloat(d.value)
@@ -243,10 +251,10 @@
         // 2. 金银比
         async function initGoldSilverRatio() {
             const data = await loadData('GOLD_SILVER_RATIO.json');
-            if (!data || !data.observations) return;
+            if (!data || !data.series) return;
             
-            const chartData = data.observations
-                .filter(d => d.value !== null && d.value !== '.')
+            const chartData = data.series
+                .filter(d => d.value !== null && d.value !== '.' && !isNaN(d.value))
                 .map(d => ({
                     x: new Date(d.date),
                     y: parseFloat(d.value)
@@ -274,10 +282,11 @@
                         label: '长期均值 (60)',
                         data: chartData.map(d => ({ x: d.x, y: avgValue })),
                         borderColor: 'rgba(255,255,255,0.3)',
-                        borderWidth: 1,
-                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        borderDash: [10, 5],
                         fill: false,
-                        pointRadius: 0
+                        pointRadius: 0,
+                        type: 'line'
                     }]
                 },
                 options: {
@@ -311,17 +320,17 @@
             const goldData = await loadData('GOLD_FUTURES.json');
             const silverData = await loadData('SILVER_FUTURES.json');
             
-            if (!goldData || !silverData) return;
+            if (!goldData || !silverData || !goldData.series || !silverData.series) return;
             
-            const goldPrices = goldData.observations
-                .filter(d => d.value !== null && d.value !== '.')
+            const goldPrices = goldData.series
+                .filter(d => d.value !== null && d.value !== '.' && !isNaN(d.value))
                 .map(d => ({
                     x: new Date(d.date),
                     y: parseFloat(d.value)
                 }));
             
-            const silverPrices = silverData.observations
-                .filter(d => d.value !== null && d.value !== '.')
+            const silverPrices = silverData.series
+                .filter(d => d.value !== null && d.value !== '.' && !isNaN(d.value))
                 .map(d => ({
                     x: new Date(d.date),
                     y: parseFloat(d.value)
