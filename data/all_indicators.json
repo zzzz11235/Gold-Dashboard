@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-03T02:34:48.582Z",
+  "updated": "2026-04-03T04:04:48.853Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -14,6 +14,26 @@
     {
       "id": "GOLD_USD",
       "name_zh": "GOLD_USD",
+      "status": "success"
+    },
+    {
+      "id": "SILVER_FUTURES",
+      "name_zh": "SILVER_FUTURES",
+      "status": "success"
+    },
+    {
+      "id": "SP500_INDEX",
+      "name_zh": "SP500_INDEX",
+      "status": "success"
+    },
+    {
+      "id": "GOLD_SILVER_RATIO",
+      "name_zh": "GOLD_SILVER_RATIO",
+      "status": "success"
+    },
+    {
+      "id": "SP500_GOLD_RATIO",
+      "name_zh": "SP500_GOLD_RATIO",
       "status": "success"
     },
     {
