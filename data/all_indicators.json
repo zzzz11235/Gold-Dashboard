@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-03T04:04:48.853Z",
+  "updated": "2026-04-03T05:10:50.895Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -34,6 +34,46 @@
     {
       "id": "SP500_GOLD_RATIO",
       "name_zh": "SP500_GOLD_RATIO",
+      "status": "success"
+    },
+    {
+      "id": "OIL_FUTURES",
+      "name_zh": "OIL_FUTURES",
+      "status": "success"
+    },
+    {
+      "id": "BITCOIN_USD",
+      "name_zh": "BITCOIN_USD",
+      "status": "success"
+    },
+    {
+      "id": "GOLD_OIL_RATIO",
+      "name_zh": "GOLD_OIL_RATIO",
+      "status": "success"
+    },
+    {
+      "id": "SPY_ETF",
+      "name_zh": "SPY_ETF",
+      "status": "success"
+    },
+    {
+      "id": "QQQ_ETF",
+      "name_zh": "QQQ_ETF",
+      "status": "success"
+    },
+    {
+      "id": "TLT_ETF",
+      "name_zh": "TLT_ETF",
+      "status": "success"
+    },
+    {
+      "id": "IEF_ETF",
+      "name_zh": "IEF_ETF",
+      "status": "success"
+    },
+    {
+      "id": "SHV_ETF",
+      "name_zh": "SHV_ETF",
       "status": "success"
     },
     {
@@ -99,6 +139,11 @@
     {
       "id": "DEXCHUS",
       "name_zh": "美元兑人民币",
+      "status": "success"
+    },
+    {
+      "id": "WALCL",
+      "name_zh": "美联储总资产",
       "status": "success"
     }
   ]
