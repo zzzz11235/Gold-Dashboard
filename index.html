@@ -5,24 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>黄金看板 - 实时金价追踪</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/common.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a2a 0%, #16213e 50%, #0f3443 100%);
-            color: #fff;
-            min-height: 100vh;
-            padding: 20px;
+            padding: 0;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 20px;
         }
         
         header {
@@ -341,6 +333,18 @@
     </style>
 </head>
 <body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">📊</span>
+            <span class="nav-title">黄金看板</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">总览</a>
+            <a href="prices.html" class="nav-link">金价走势</a>
+        </div>
+    </nav>
+
     <div class="container">
         <header>
             <h1>🏆 黄金看板</h1>

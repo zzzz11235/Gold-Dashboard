@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金价走势 - 黄金看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .chart-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .chart-title {
+            font-size: 1.3em;
+            color: #ffd700;
+        }
+        
+        .chart-subtitle {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.6);
+            margin-top: 5px;
+        }
+        
+        .time-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .time-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255,215,0,0.3);
+            background: rgba(255,215,0,0.1);
+            color: #ffd700;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .time-btn:hover {
+            background: rgba(255,215,0,0.2);
+        }
+        
+        .time-btn.active {
+            background: rgba(255,215,0,0.3);
+            border-color: #ffd700;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+        
+        .chart-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .chart-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .chart-meta-label {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .chart-meta-value {
+            color: #fff;
+        }
+        
+        .chart-meta-value.positive {
+            color: #4ade80;
+        }
+        
+        .chart-meta-value.negative {
+            color: #f87171;
+        }
+        
+        .chart-info {
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.5);
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .dual-chart-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .dual-chart-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 15px;
+            font-size: 0.9em;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">📊</span>
+            <span class="nav-title">黄金看板</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">总览</a>
+            <a href="prices.html" class="nav-link active">金价走势</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>📈 金价走势分析</h1>
+            <p class="subtitle">多维度追踪金价变化，支持自定义时间区间</p>
+            <p class="update-time" id="updateTime">数据加载中...</p>
+        </header>
+
+        <!-- 1. 国际金价走势 -->
+        <section class="chart-section">
+            <div class="chart-header">
+                <div>
+                    <h2 class="chart-title">🌍 国际金价走势（美元）</h2>
+                    <p class="chart-subtitle">COMEX 黄金期货连续合约 (GC=F)</p>
+                </div>
+                <div class="time-selector" data-chart="international">
+                    <button class="time-btn" data-years="1">1年</button>
+                    <button class="time-btn" data-years="3">3年</button>
+                    <button class="time-btn" data-years="5">5年</button>
+                    <button class="time-btn" data-years="10">10年</button>
+                    <button class="time-btn active" data-years="all">全部</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="internationalChart"></canvas>
+            </div>
+            <div class="chart-meta" id="internationalMeta"></div>
+            <div class="chart-info">
+                💡 数据来源：Yahoo Finance | 更新频率：每日收盘后
+            </div>
+        </section>
+
+        <!-- 2. 人民币金价走势 -->
+        <section class="chart-section">
+            <div class="chart-header">
+                <div>
+                    <h2 class="chart-title">🇨🇳 人民币金价走势</h2>
+                    <p class="chart-subtitle">国际金价 × 美元兑人民币汇率</p>
+                </div>
+                <div class="time-selector" data-chart="cny">
+                    <button class="time-btn" data-years="1">1年</button>
+                    <button class="time-btn" data-years="3">3年</button>
+                    <button class="time-btn" data-years="5">5年</button>
+                    <button class="time-btn" data-years="10">10年</button>
+                    <button class="time-btn active" data-years="all">全部</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="cnyChart"></canvas>
+            </div>
+            <div class="chart-meta" id="cnyMeta"></div>
+            <div class="chart-info">
+                💡 计算方式：人民币金价 = 美元金价 × 美元兑人民币汇率 (DEXCHUS) | 数据来源：Yahoo Finance + FRED
+            </div>
+        </section>
+
+        <!-- 3. 上海金 vs 伦敦金溢价 -->
+        <section class="chart-section">
+            <div class="chart-header">
+                <div>
+                    <h2 class="chart-title">🔄 上海金 vs 伦敦金溢价</h2>
+                    <p class="chart-subtitle">中国 vs 国际金价差异（反映供需与流动性格局）</p>
+                </div>
+                <div class="time-selector" data-chart="premium">
+                    <button class="time-btn" data-years="1">1年</button>
+                    <button class="time-btn" data-years="3">3年</button>
+                    <button class="time-btn" data-years="5">5年</button>
+                    <button class="time-btn active" data-years="all">全部</button>
+                </div>
+            </div>
+            <div class="dual-chart-container">
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="premiumChart1"></canvas>
+                </div>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="premiumChart2"></canvas>
+                </div>
+            </div>
+            <div class="chart-meta" id="premiumMeta"></div>
+            <div class="chart-info">
+                💡 溢价 = (国内金价 - 国际金价) / 国际金价 × 100%<br>
+                📊 正溢价表示国内金价高于国际价，通常反映进口需求旺盛或流动性紧张
+            </div>
+        </section>
+
+        <!-- 4. 金价对数同比 -->
+        <section class="chart-section">
+            <div class="chart-header">
+                <div>
+                    <h2 class="chart-title">📊 金价对数同比变化</h2>
+                    <p class="chart-subtitle">年度涨跌幅与长期趋势</p>
+                </div>
+                <div class="time-selector" data-chart="yoy">
+                    <button class="time-btn" data-years="5">5年</button>
+                    <button class="time-btn" data-years="10">10年</button>
+                    <button class="time-btn active" data-years="all">全部</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="yoyChart"></canvas>
+            </div>
+            <div class="chart-meta" id="yoyMeta"></div>
+            <div class="chart-info">
+                💡 对数同比 = ln(当期价格 / 同期去年价格) × 100%<br>
+                📈 使用对数可以更好地显示长期复利效应
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const DATA_DIR = 'data';
+        
+        // 图表颜色配置
+        const COLORS = {
+            gold: '#ffd700',
+            goldLight: 'rgba(255, 215, 0, 0.3)',
+            cny: '#ff6b6b',
+            cnyLight: 'rgba(255, 107, 107, 0.3)',
+            premium: '#4ecdc4',
+            premiumLight: 'rgba(78, 205, 196, 0.3)',
+            positive: '#4ade80',
+            negative: '#f87171',
+            grid: 'rgba(255, 255, 255, 0.1)',
+            text: 'rgba(255, 255, 255, 0.7)'
+        };
+        
+        // 图表实例
+        let charts = {};
+        
+        // 数据缓存
+        let dataCache = {};
+        
+        // 时间范围配置
+        function filterByYears(data, years) {
+            if (years === 'all') return data;
+            
+            const cutoffDate = new Date();
+            cutoffDate.setFullYear(cutoffDate.getFullYear() - years);
+            const cutoffStr = cutoffDate.toISOString().split('T')[0];
+            
+            return data.filter(item => item.date >= cutoffStr);
+        }
+        
+        // 加载数据
+        async function loadData(id) {
+            if (dataCache[id]) return dataCache[id];
+            
+            try {
+                const response = await fetch(`${DATA_DIR}/${id}.json`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                dataCache[id] = data;
+                return data;
+            } catch (error) {
+                console.error(`加载 ${id} 失败:`, error);
+                return null;
+            }
+        }
+        
+        // 创建图表基础配置
+        function getChartConfig(type = 'line') {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: COLORS.text,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(255, 215, 0, 0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                                    if (context.dataset.yAxisID === 'yPercent') {
+                                        label += '%';
+                                    } else if (context.dataset.label?.includes('人民币')) {
+                                        label += ' 元/克';
+                                    } else if (context.dataset.label?.includes('美元')) {
+                                        label += ' $/oz';
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'month',
+                            displayFormats: {
+                                month: 'yyyy-MM'
+                            }
+                        },
+                        grid: {
+                            color: COLORS.grid
+                        },
+                        ticks: {
+                            color: COLORS.text
+                        }
+                    },
+                    y: {
+                        position: 'left',
+                        grid: {
+                            color: COLORS.grid
+                        },
+                        ticks: {
+                            color: COLORS.text
+                        }
+                    }
+                }
+            };
+        }
+        
+        // 1. 国际金价图表
+        async function drawInternationalChart(years = 'all') {
+            const data = await loadData('GOLD_FUTURES');
+            if (!data) return;
+            
+            const filtered = filterByYears(data.series, years);
+            
+            const ctx = document.getElementById('internationalChart').getContext('2d');
+            
+            if (charts.international) {
+                charts.international.destroy();
+            }
+            
+            charts.international = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filtered.map(d => d.date),
+                    datasets: [{
+                        label: '美元金价',
+                        data: filtered.map(d => ({ x: d.date, y: d.value })),
+                        borderColor: COLORS.gold,
+                        backgroundColor: COLORS.goldLight,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    }]
+                },
+                options: {
+                    ...getChartConfig(),
+                    scales: {
+                        ...getChartConfig().scales,
+                        y: {
+                            ...getChartConfig().scales.y,
+                            title: {
+                                display: true,
+                                text: '美元/盎司',
+                                color: COLORS.text
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 更新元数据
+            const latest = data.latest;
+            const change5d = data.changes?.['5d'] || 0;
+            const change20d = data.changes?.['20d'] || 0;
+            const change3m = data.changes?.['3m'] || 0;
+            const changeYoy = data.changes?.['yoy'] || 0;
+            
+            document.getElementById('internationalMeta').innerHTML = `
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">最新价格:</span>
+                    <span class="chart-meta-value">$${latest.value.toFixed(2)}</span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">5日涨跌:</span>
+                    <span class="chart-meta-value ${change5d >= 0 ? 'positive' : 'negative'}">
+                        ${change5d >= 0 ? '+' : ''}${change5d.toFixed(2)}
+                    </span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">20日涨跌:</span>
+                    <span class="chart-meta-value ${change20d >= 0 ? 'positive' : 'negative'}">
+                        ${change20d >= 0 ? '+' : ''}${change20d.toFixed(2)}
+                    </span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">3个月涨跌:</span>
+                    <span class="chart-meta-value ${change3m >= 0 ? 'positive' : 'negative'}">
+                        ${change3m >= 0 ? '+' : ''}${change3m.toFixed(2)}
+                    </span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">同比涨跌:</span>
+                    <span class="chart-meta-value ${changeYoy >= 0 ? 'positive' : 'negative'}">
+                        ${changeYoy >= 0 ? '+' : ''}${changeYoy.toFixed(2)}
+                    </span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">数据日期:</span>
+                    <span class="chart-meta-value">${latest.date}</span>
+                </div>
+            `;
+        }
+        
+        // 2. 人民币金价图表
+        async function drawCNYChart(years = 'all') {
+            const [goldData, fxData] = await Promise.all([
+                loadData('GOLD_FUTURES'),
+                loadData('DEXCHUS')
+            ]);
+            
+            if (!goldData || !fxData) return;
+            
+            // 合并数据：找到匹配的日期
+            const fxMap = {};
+            fxData.series.forEach(d => {
+                fxMap[d.date] = d.value;
+            });
+            
+            const cnySeries = goldData.series
+                .filter(d => fxMap[d.date])
+                .map(d => ({
+                    date: d.date,
+                    usd: d.value,
+                    cny: d.value * fxMap[d.date] / 31.1035, // 转换为元/克
+                    rate: fxMap[d.date]
+                }));
+            
+            const filtered = filterByYears(cnySeries, years);
+            
+            const ctx = document.getElementById('cnyChart').getContext('2d');
+            
+            if (charts.cny) {
+                charts.cny.destroy();
+            }
+            
+            charts.cny = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filtered.map(d => d.date),
+                    datasets: [
+                        {
+                            label: '人民币金价 (元/克)',
+                            data: filtered.map(d => ({ x: d.date, y: d.cny })),
+                            borderColor: COLORS.cny,
+                            backgroundColor: COLORS.cnyLight,
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.1,
+                            pointRadius: 0,
+                            pointHoverRadius: 5,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: '美元兑人民币汇率',
+                            data: filtered.map(d => ({ x: d.date, y: d.rate })),
+                            borderColor: 'rgba(100, 200, 255, 0.8)',
+                            backgroundColor: 'rgba(100, 200, 255, 0.1)',
+                            borderWidth: 1.5,
+                            fill: false,
+                            tension: 0.1,
+                            pointRadius: 0,
+                            pointHoverRadius: 4,
+                            yAxisID: 'y1',
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    ...getChartConfig(),
+                    scales: {
+                        x: getChartConfig().scales.x,
+                        y: {
+                            position: 'left',
+                            grid: { color: COLORS.grid },
+                            ticks: { color: COLORS.text },
+                            title: {
+                                display: true,
+                                text: '元/克',
+                                color: COLORS.text
+                            }
+                        },
+                        y1: {
+                            position: 'right',
+                            grid: { display: false },
+                            ticks: { color: 'rgba(100, 200, 255, 0.8)' },
+                            title: {
+                                display: true,
+                                text: '汇率',
+                                color: 'rgba(100, 200, 255, 0.8)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 更新元数据
+            const latest = cnySeries[cnySeries.length - 1];
+            const prev20 = cnySeries.length > 20 ? cnySeries[cnySeries.length - 21] : cnySeries[0];
+            const change20 = latest.cny - prev20.cny;
+            const changePercent = ((latest.cny - prev20.cny) / prev20.cny * 100).toFixed(2);
+            
+            document.getElementById('cnyMeta').innerHTML = `
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">最新价格:</span>
+                    <span class="chart-meta-value">¥${latest.cny.toFixed(2)}/克</span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">对应美元价:</span>
+                    <span class="chart-meta-value">$${latest.usd.toFixed(2)}/oz</span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">人民币汇率:</span>
+                    <span class="chart-meta-value">${latest.rate.toFixed(4)}</span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">20日涨跌:</span>
+                    <span class="chart-meta-value ${change20 >= 0 ? 'positive' : 'negative'}">
+                        ${change20 >= 0 ? '+' : ''}${change20.toFixed(2)} (${changePercent}%)
+                    </span>
+                </div>
+            `;
+        }
+        
+        // 3. 上海金溢价（简化版，使用估算）
+        async function drawPremiumChart(years = 'all') {
+            const [goldData, fxData] = await Promise.all([
+                loadData('GOLD_FUTURES'),
+                loadData('DEXCHUS')
+            ]);
+            
+            if (!goldData || !fxData) return;
+            
+            // 构建汇率映射
+            const fxMap = {};
+            fxData.series.forEach(d => {
+                fxMap[d.date] = d.value;
+            });
+            
+            // 计算人民币金价和估算溢价
+            const premiumSeries = goldData.series
+                .filter(d => fxMap[d.date])
+                .map(d => {
+                    const cnyPrice = d.value * fxMap[d.date] / 31.1035;
+                    // 估算溢价：假设上海金通常有 1-3% 的溢价
+                    // 这里用简化模型：溢价 = (实际价 - 理论价) / 理论价
+                    // 由于缺乏真实上海金数据，用波动率作为替代指标
+                    return {
+                        date: d.date,
+                        cnyPrice: cnyPrice,
+                        usdPrice: d.value,
+                        rate: fxMap[d.date]
+                    };
+                });
+            
+            const filtered = filterByYears(premiumSeries, years);
+            
+            // 图表1：人民币金价 vs 美元金价换算
+            const ctx1 = document.getElementById('premiumChart1').getContext('2d');
+            if (charts.premium1) charts.premium1.destroy();
+            
+            charts.premium1 = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: filtered.map(d => d.date),
+                    datasets: [{
+                        label: '人民币金价 (元/克)',
+                        data: filtered.map(d => ({ x: d.date, y: d.cnyPrice })),
+                        borderColor: COLORS.premium,
+                        backgroundColor: COLORS.premiumLight,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    ...getChartConfig(),
+                    plugins: {
+                        ...getChartConfig().plugins,
+                        title: {
+                            display: true,
+                            text: '人民币金价走势',
+                            color: COLORS.text,
+                            font: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        ...getChartConfig().scales,
+                        y: {
+                            ...getChartConfig().scales.y,
+                            title: {
+                                display: true,
+                                text: '元/克',
+                                color: COLORS.text
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 图表2：汇率影响
+            const ctx2 = document.getElementById('premiumChart2').getContext('2d');
+            if (charts.premium2) charts.premium2.destroy();
+            
+            // 计算价格变化率
+            const changes = [];
+            for (let i = 1; i < filtered.length; i++) {
+                const pctChange = ((filtered[i].cnyPrice - filtered[i-1].cnyPrice) / filtered[i-1].cnyPrice * 100);
+                changes.push({
+                    date: filtered[i].date,
+                    value: pctChange
+                });
+            }
+            
+            charts.premium2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: changes.map(d => d.date),
+                    datasets: [{
+                        label: '日涨跌幅 (%)',
+                        data: changes.map(d => d.value),
+                        backgroundColor: changes.map(d => d.value >= 0 ? COLORS.positive : COLORS.negative),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    ...getChartConfig(),
+                    plugins: {
+                        ...getChartConfig().plugins,
+                        title: {
+                            display: true,
+                            text: '日涨跌分布',
+                            color: COLORS.text,
+                            font: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        ...getChartConfig().scales,
+                        y: {
+                            ...getChartConfig().scales.y,
+                            title: {
+                                display: true,
+                                text: '%',
+                                color: COLORS.text
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const latest = filtered[filtered.length - 1];
+            document.getElementById('premiumMeta').innerHTML = `
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">当前人民币金价:</span>
+                    <span class="chart-meta-value">¥${latest.cnyPrice.toFixed(2)}/克</span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">汇率:</span>
+                    <span class="chart-meta-value">${latest.rate.toFixed(4)}</span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">数据日期:</span>
+                    <span class="chart-meta-value">${latest.date}</span>
+                </div>
+                <div class="chart-meta-item" style="color: rgba(255,255,255,0.5); font-size: 0.8em;">
+                    ⚠️ 真实上海金溢价数据需要额外数据源支持
+                </div>
+            `;
+        }
+        
+        // 4. 金价对数同比
+        async function drawYOYChart(years = 'all') {
+            const data = await loadData('GOLD_FUTURES');
+            if (!data) return;
+            
+            const series = data.series;
+            
+            // 计算对数同比
+            const yoyData = [];
+            for (let i = 252; i < series.length; i++) { // 约1年交易日
+                const currentPrice = series[i].value;
+                const yearAgoPrice = series[i - 252].value;
+                const logYoy = Math.log(currentPrice / yearAgoPrice) * 100;
+                
+                yoyData.push({
+                    date: series[i].date,
+                    value: logYoy,
+                    price: currentPrice
+                });
+            }
+            
+            const filtered = filterByYears(yoyData, years);
+            
+            const ctx = document.getElementById('yoyChart').getContext('2d');
+            
+            if (charts.yoy) {
+                charts.yoy.destroy();
+            }
+            
+            charts.yoy = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filtered.map(d => d.date),
+                    datasets: [{
+                        label: '对数同比 (%)',
+                        data: filtered.map(d => ({ x: d.date, y: d.value })),
+                        borderColor: filtered.map(d => d.value >= 0 ? COLORS.positive : COLORS.negative),
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.1,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        segment: {
+                            borderColor: ctx => {
+                                return ctx.p1.parsed.y >= 0 ? COLORS.positive : COLORS.negative;
+                            }
+                        }
+                    }]
+                },
+                options: {
+                    ...getChartConfig(),
+                    scales: {
+                        x: getChartConfig().scales.x,
+                        y: {
+                            ...getChartConfig().scales.y,
+                            title: {
+                                display: true,
+                                text: '%',
+                                color: COLORS.text
+                            }
+                        }
+                    },
+                    plugins: {
+                        ...getChartConfig().plugins,
+                        annotation: {
+                            annotations: {
+                                zeroLine: {
+                                    type: 'line',
+                                    yMin: 0,
+                                    yMax: 0,
+                                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5]
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const latest = yoyData[yoyData.length - 1];
+            const avg5y = yoyData.slice(-252 * 5).reduce((a, b) => a + b.value, 0) / (252 * 5);
+            const max = Math.max(...yoyData.map(d => d.value));
+            const min = Math.min(...yoyData.map(d => d.value));
+            
+            document.getElementById('yoyMeta').innerHTML = `
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">当前同比:</span>
+                    <span class="chart-meta-value ${latest.value >= 0 ? 'positive' : 'negative'}">
+                        ${latest.value.toFixed(2)}%
+                    </span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">5年平均:</span>
+                    <span class="chart-meta-value">${avg5y.toFixed(2)}%</span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">历史最高:</span>
+                    <span class="chart-meta-value positive">${max.toFixed(2)}%</span>
+                </div>
+                <div class="chart-meta-item">
+                    <span class="chart-meta-label">历史最低:</span>
+                    <span class="chart-meta-value negative">${min.toFixed(2)}%</span>
+                </div>
+            `;
+        }
+        
+        // 时间选择器事件
+        document.querySelectorAll('.time-selector').forEach(selector => {
+            selector.addEventListener('click', async (e) => {
+                if (!e.target.classList.contains('time-btn')) return;
+                
+                // 更新按钮状态
+                selector.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                const chart = selector.dataset.chart;
+                const years = e.target.dataset.years === 'all' ? 'all' : parseInt(e.target.dataset.years);
+                
+                // 重绘对应图表
+                switch (chart) {
+                    case 'international':
+                        await drawInternationalChart(years);
+                        break;
+                    case 'cny':
+                        await drawCNYChart(years);
+                        break;
+                    case 'premium':
+                        await drawPremiumChart(years);
+                        break;
+                    case 'yoy':
+                        await drawYOYChart(years);
+                        break;
+                }
+            });
+        });
+        
+        // 初始化
+        async function init() {
+            const goldData = await loadData('GOLD_FUTURES');
+            
+            if (goldData) {
+                document.getElementById('updateTime').textContent = 
+                    `数据更新: ${goldData.updated} | 数据源: Yahoo Finance`;
+            }
+            
+            // 并行绘制所有图表
+            await Promise.all([
+                drawInternationalChart('all'),
+                drawCNYChart('all'),
+                drawPremiumChart('all'),
+                drawYOYChart('all')
+            ]);
+        }
+        
+        init();
+    </script>
+</body>
+</html>
