@@ -1,0 +1,69 @@
+{
+  "id": "FYFSGDA188S",
+  "name_zh": "财政赤字/GDP",
+  "name_en": "FYFSGDA188S",
+  "unit": "%",
+  "section": "财政与信用",
+  "direction": "positive",
+  "thresholds": null,
+  "metadata": {
+    "source": "FRED (Federal Reserve Economic Data)",
+    "source_url": "https://fred.stlouisfed.org",
+    "series_id": "FYFSGDA188S",
+    "api_endpoint": "https://api.stlouisfed.org/fred/series/observations?series_id=FYFSGDA188S",
+    "fred_page": "https://fred.stlouisfed.org/series/FYFSGDA188S",
+    "description": "美联储圣路易斯联储银行官方经济数据",
+    "update_frequency": "根据各指标发布周期更新（通常为日/周/月）"
+  },
+  "updated": "2026-04-03",
+  "latest": {
+    "date": "2025-01-01",
+    "value": -5.77031
+  },
+  "changes": {
+    "yoy": 0.43075999999999937
+  },
+  "percentiles": {},
+  "series": [
+    {
+      "date": "2016-01-01",
+      "value": -3.10903
+    },
+    {
+      "date": "2017-01-01",
+      "value": -3.39306
+    },
+    {
+      "date": "2018-01-01",
+      "value": -3.77157
+    },
+    {
+      "date": "2019-01-01",
+      "value": -4.56634
+    },
+    {
+      "date": "2020-01-01",
+      "value": -14.65457
+    },
+    {
+      "date": "2021-01-01",
+      "value": -11.69768
+    },
+    {
+      "date": "2022-01-01",
+      "value": -5.28091
+    },
+    {
+      "date": "2023-01-01",
+      "value": -6.09546
+    },
+    {
+      "date": "2024-01-01",
+      "value": -6.20107
+    },
+    {
+      "date": "2025-01-01",
+      "value": -5.77031
+    }
+  ]
+}

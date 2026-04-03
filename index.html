@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄金看板 - 实时金价追踪</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2a 0%, #16213e 50%, #0f3443 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .update-time {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.5);
+            margin-top: 10px;
+        }
+        
+        /* 实时价格区域 */
+        .realtime-section {
+            background: rgba(255,215,0,0.1);
+            border: 2px solid rgba(255,215,0,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .realtime-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .realtime-title {
+            font-size: 1.3em;
+            color: #ffd700;
+        }
+        
+        .realtime-status {
+            font-size: 0.85em;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+        
+        .realtime-status.error {
+            background: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+        
+        .realtime-status.loading {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        
+        .realtime-prices {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        
+        .price-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .price-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .price-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .price-symbol {
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.5);
+            margin-top: 5px;
+        }
+        
+        .price-badge {
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: rgba(255,215,0,0.2);
+            color: #ffd700;
+        }
+        
+        .price-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #fff;
+            margin: 10px 0;
+        }
+        
+        .price-change {
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        
+        .positive { color: #4ade80; }
+        .negative { color: #f87171; }
+        .neutral { color: #94a3b8; }
+        
+        .price-meta {
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+        
+        .price-meta-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+        
+        .price-meta-label {
+            color: rgba(255,255,255,0.4);
+        }
+        
+        .price-meta-value a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        
+        .price-meta-value a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 分区样式 */
+        .section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            color: #ffd700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-subtitle {
+            font-size: 0.6em;
+            color: rgba(255,255,255,0.5);
+            font-weight: normal;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .stat-card.active {
+            border: 2px solid #ffd700;
+        }
+        
+        .stat-title {
+            font-size: 0.95em;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .stat-change {
+            font-size: 0.95em;
+            margin-top: 8px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stat-change span {
+            display: inline-block;
+        }
+        
+        .stat-meta {
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.4);
+            margin-top: 10px;
+        }
+        
+        /* 图表容器 */
+        .chart-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            height: 450px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 1.2em;
+            color: #ffd700;
+        }
+        
+        .chart-meta {
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        #priceChart {
+            width: 100% !important;
+            height: 350px !important;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 15px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-msg {
+            text-align: center;
+            padding: 40px;
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9em;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 40px;
+        }
+        
+        .footer-sources {
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        
+        .footer-sources a {
+            color: #60a5fa;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .footer-sources a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .stat-value { font-size: 1.6em; }
+            .chart-container { height: 350px; }
+            .realtime-prices { grid-template-columns: 1fr; }
+            .price-value { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 黄金看板</h1>
+            <p class="subtitle">实时追踪贵金属价格与宏观经济指标</p>
+            <p class="update-time">历史数据更新: <span id="updateTime">加载中...</span></p>
+        </header>
+        
+        <!-- 实时价格区域 -->
+        <div class="realtime-section">
+            <div class="realtime-header">
+                <h2 class="realtime-title">⚡ 实时价格（页面刷新时获取）</h2>
+                <span class="realtime-status" id="realtimeStatus">加载中...</span>
+            </div>
+            <div class="realtime-prices" id="realtimePrices">
+                <div class="loading">正在获取实时数据</div>
+            </div>
+        </div>
+        
+        <div id="content">
+            <div class="loading">正在加载历史数据</div>
+        </div>
+        
+        <div class="chart-container" id="chartSection" style="display: none;">
+            <div class="chart-header">
+                <h2 class="chart-title" id="chartTitle">📈 价格走势</h2>
+                <div class="chart-meta" id="chartMeta"></div>
+            </div>
+            <canvas id="priceChart"></canvas>
+        </div>
+        
+        <footer>
+            <p>⚠️ 仅供参考，不构成投资建议</p>
+            <div class="footer-sources">
+                <strong>数据来源：</strong>
+                <a href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a>
+                <a href="https://fred.stlouisfed.org" target="_blank">FRED (美联储)</a>
+            </div>
+            <p style="margin-top: 10px; font-size: 0.85em;">
+                💻 项目地址: <a href="https://github.com/zzzz11235/Gold-Dashboard" style="color: #60a5fa;">GitHub</a>
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // ========== 配置 ==========
+        const DATA_DIR = 'data';
+        
+        // 实时价格配置（Yahoo Finance API）
+        const REALTIME_PRICES = [
+            {
+                id: 'GOLD_FUTURES',
+                symbol: 'GC=F',
+                name: '黄金期货',
+                name_en: 'Gold Futures',
+                type: '期货',
+                description: '纽约商品交易所(COMEX)黄金期货连续合约',
+                api_url: 'https://query1.finance.yahoo.com/v8/finance/chart/GC=F',
+                yahoo_page: 'https://finance.yahoo.com/quote/GC=F',
+                unit: '美元/盎司',
+                notes: '期货价格，反映市场对未来金价的预期'
+            },
+            {
+                id: 'GOLD_ETF',
+                symbol: 'GLD',
+                name: '黄金ETF',
+                name_en: 'SPDR Gold Shares',
+                type: 'ETF',
+                description: '全球最大黄金ETF，追踪黄金现货价格',
+                api_url: 'https://query1.finance.yahoo.com/v8/finance/chart/GLD',
+                yahoo_page: 'https://finance.yahoo.com/quote/GLD',
+                unit: '美元/股',
+                notes: 'ETF价格约为金价1/10（1股GLD ≈ 0.1盎司黄金）'
+            }
+        ];
+        
+        const INDICATORS = {
+            '历史走势数据': ['GOLD_FUTURES', 'GOLD_ETF'],
+            '机会成本': ['DFII10', 'DFII5', 'T10YIE', 'FEDFUNDS'],
+            '美元与流动性': ['DTWEXBGS', 'DEXCHUS'],
+            '通胀与增长': ['PCEPI', 'IPMAN', 'UNRATE'],
+            '财政与信用': ['GFDEBTN', 'GFDEGDQ188S', 'FYFSGDA188S'],
+            '风险温度': ['GVZCLS']
+        };
+        
+        let allData = {};
+        let chart = null;
+        let currentMetric = 'GOLD_FUTURES';
+        
+        // ========== 实时价格获取（从本地 JSON 文件读取，避免 CORS 问题）==========
+        async function fetchRealtimePrices() {
+            const container = document.getElementById('realtimePrices');
+            const statusEl = document.getElementById('realtimeStatus');
+
+            statusEl.className = 'realtime-status loading';
+            statusEl.textContent = '正在加载...';
+
+            const results = await Promise.all(
+                REALTIME_PRICES.map(async (config) => {
+                    try {
+                        // 从本地 JSON 文件读取数据（由 GitHub Actions 预先获取）
+                        const response = await fetch(`${DATA_DIR}/${config.id}.json`);
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                        const data = await response.json();
+
+                        if (!data.latest || !data.series) {
+                            throw new Error('数据格式错误');
+                        }
+
+                        const latestPrice = data.latest.value;
+                        const latestDate = data.latest.date;
+
+                        // 计算涨跌幅（使用前一日数据）
+                        const series = data.series;
+                        const todayIndex = series.findIndex(s => s.date === latestDate);
+                        const prevPrice = todayIndex > 0 ? series[todayIndex - 1].value : latestPrice;
+                        const change = latestPrice - prevPrice;
+                        const changePercent = prevPrice > 0 ? (change / prevPrice) * 100 : 0;
+
+                        return {
+                            ...config,
+                            success: true,
+                            price: latestPrice,
+                            change: change,
+                            changePercent: changePercent,
+                            previousClose: prevPrice,
+                            currency: 'USD',
+                            exchangeTime: 'America/New_York',
+                            updatedAt: data.updated + ' (数据更新)',
+                            dataDate: latestDate,
+                            changes5d: data.changes?.['5d'],
+                            changes20d: data.changes?.['20d']
+                        };
+                    } catch (error) {
+                        console.error(`加载 ${config.symbol} 失败:`, error);
+                        return {
+                            ...config,
+                            success: false,
+                            error: error.message
+                        };
+                    }
+                })
+            );
+            
+            // 渲染结果
+            const successCount = results.filter(r => r.success).length;
+            if (successCount === results.length) {
+                statusEl.className = 'realtime-status';
+                statusEl.textContent = `✅ 已获取 ${successCount}/${results.length}`;
+            } else if (successCount > 0) {
+                statusEl.className = 'realtime-status loading';
+                statusEl.textContent = `⚠️ 部分成功 ${successCount}/${results.length}`;
+            } else {
+                statusEl.className = 'realtime-status error';
+                statusEl.textContent = '❌ 获取失败';
+            }
+            
+            container.innerHTML = results.map(renderRealtimePriceCard).join('');
+        }
+        
+        function renderRealtimePriceCard(data) {
+            if (!data.success) {
+                return `
+                    <div class="price-card">
+                        <div class="price-card-header">
+                            <div>
+                                <div class="price-name">${data.name}</div>
+                                <div class="price-symbol">${data.symbol}</div>
+                            </div>
+                            <span class="price-badge">${data.type}</span>
+                        </div>
+                        <div class="error-msg" style="padding: 20px; margin: 10px 0;">
+                            ❌ 加载失败: ${data.error}
+                        </div>
+                    </div>
+                `;
+            }
+
+            const changeClass = data.change >= 0 ? 'positive' : 'negative';
+            const changeSign = data.change >= 0 ? '+' : '';
+            const formatChange = (val) => val ? `${val >= 0 ? '+' : ''}${val.toFixed(2)}` : 'N/A';
+
+            return `
+                <div class="price-card">
+                    <div class="price-card-header">
+                        <div>
+                            <div class="price-name">${data.name}</div>
+                            <div class="price-symbol">${data.symbol} · ${data.name_en}</div>
+                        </div>
+                        <span class="price-badge">${data.type}</span>
+                    </div>
+
+                    <div class="price-value">
+                        ${data.currency === 'USD' ? '$' : ''}${data.price.toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })}
+                    </div>
+
+                    <div class="price-change ${changeClass}">
+                        ${changeSign}${data.change.toFixed(2)} (${changeSign}${data.changePercent.toFixed(2)}%)
+                        <span style="color: rgba(255,255,255,0.4); margin-left: 10px;">较昨收</span>
+                    </div>
+
+                    <div class="price-meta">
+                        <div class="price-meta-item">
+                            <span class="price-meta-label">数据日期</span>
+                            <span class="price-meta-value">${data.dataDate || 'N/A'}</span>
+                        </div>
+                        <div class="price-meta-item">
+                            <span class="price-meta-label">5日涨跌</span>
+                            <span class="price-meta-value" style="color: ${data.changes5d >= 0 ? '#4ade80' : '#f87171'}">
+                                ${data.changes5d ? formatChange(data.changes5d) : 'N/A'}
+                            </span>
+                        </div>
+                        <div class="price-meta-item">
+                            <span class="price-meta-label">20日涨跌</span>
+                            <span class="price-meta-value" style="color: ${data.changes20d >= 0 ? '#4ade80' : '#f87171'}">
+                                ${data.changes20d ? formatChange(data.changes20d) : 'N/A'}
+                            </span>
+                        </div>
+                        <div class="price-meta-item">
+                            <span class="price-meta-label">数据来源</span>
+                            <span class="price-meta-value">
+                                <a href="${data.yahoo_page}" target="_blank">Yahoo Finance</a>
+                                <span style="opacity:0.5; font-size:0.9em"> (GitHub Actions)</span>
+                            </span>
+                        </div>
+                        <div class="price-meta-item">
+                            <span class="price-meta-label">说明</span>
+                            <span class="price-meta-value">${data.notes}</span>
+                        </div>
+                        <div class="price-meta-item">
+                            <span class="price-meta-label">更新时间</span>
+                            <span class="price-meta-value">${data.updatedAt}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // ========== 历史数据加载 ==========
+        async function loadData() {
+            const content = document.getElementById('content');
+            
+            try {
+                // 加载所有指标数据
+                const allIndicatorIds = Object.values(INDICATORS).flat();
+                
+                await Promise.all(
+                    allIndicatorIds.map(async (id) => {
+                        try {
+                            const response = await fetch(`${DATA_DIR}/${id}.json`);
+                            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                            allData[id] = await response.json();
+                        } catch (e) {
+                            console.warn(`加载 ${id} 失败:`, e);
+                        }
+                    })
+                );
+                
+                // 渲染页面
+                renderPage();
+                
+                // 显示图表区域
+                document.getElementById('chartSection').style.display = 'block';
+                
+                // 默认显示黄金期货图表
+                if (allData.GOLD_FUTURES) {
+                    renderChart('GOLD_FUTURES');
+                } else if (allData.GOLD_USD) {
+                    renderChart('GOLD_USD');
+                }
+                
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="error-msg">
+                        <h3>❌ 数据加载失败</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // ========== 页面渲染 ==========
+        function renderPage() {
+            const content = document.getElementById('content');
+            let html = '';
+            
+            for (const [sectionName, indicators] of Object.entries(INDICATORS)) {
+                const sectionData = indicators
+                    .map(id => allData[id])
+                    .filter(d => d);
+                
+                if (sectionData.length === 0) continue;
+                
+                // 为"历史走势数据"添加副标题
+                let subtitle = '';
+                if (sectionName === '历史走势数据') {
+                    subtitle = '<span class="section-subtitle">由 GitHub Actions 每日更新</span>';
+                }
+                
+                html += `
+                    <div class="section">
+                        <h2 class="section-title">
+                            ${sectionName}
+                            ${subtitle}
+                        </h2>
+                        <div class="stats-grid">
+                            ${sectionData.map(renderCard).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            content.innerHTML = html;
+            
+            // 更新时间
+            if (allData.GOLD_FUTURES) {
+                document.getElementById('updateTime').textContent = 
+                    allData.GOLD_FUTURES.updated || '未知';
+            } else if (allData.GOLD_USD) {
+                document.getElementById('updateTime').textContent = 
+                    allData.GOLD_USD.updated || '未知';
+            }
+            
+            // 绑定点击事件
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const id = card.dataset.id;
+                    if (id && allData[id]) {
+                        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                        renderChart(id);
+                    }
+                });
+            });
+        }
+        
+        function renderCard(data) {
+            const latest = data.latest || {};
+            const changes = data.changes || {};
+            const percentiles = data.percentiles || {};
+            const metadata = data.metadata || {};
+            
+            // 格式化数值
+            let displayValue = latest.value;
+            if (typeof displayValue === 'number') {
+                if (data.unit === '%') {
+                    displayValue = displayValue.toFixed(2) + '%';
+                } else if (data.unit === '美元/盎司' || data.unit === '美元') {
+                    displayValue = '$' + displayValue.toLocaleString('en-US', { maximumFractionDigits: 2 });
+                } else {
+                    displayValue = displayValue.toLocaleString('en-US', { maximumFractionDigits: 2 });
+                }
+            }
+            
+            // 涨跌幅
+            const change5d = changes['5d'];
+            const changeYoy = changes['yoy'];
+            
+            const getChangeClass = (val) => {
+                if (val === undefined || val === null) return 'neutral';
+                if (data.direction === 'negative') return val > 0 ? 'negative' : 'positive';
+                if (data.direction === 'positive') return val > 0 ? 'positive' : 'negative';
+                return val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral';
+            };
+            
+            const formatChange = (val, unit = '') => {
+                if (val === undefined || val === null) return '--';
+                const sign = val > 0 ? '+' : '';
+                return `${sign}${val.toFixed(2)}${unit}`;
+            };
+            
+            // 数据来源信息
+            let sourceInfo = '';
+            if (metadata.source) {
+                sourceInfo = metadata.source;
+                if (metadata.symbol) {
+                    sourceInfo += ` (${metadata.symbol})`;
+                }
+            }
+            
+            return `
+                <div class="stat-card" data-id="${data.id}">
+                    <div class="stat-title">${data.name_zh}</div>
+                    <div class="stat-value">${displayValue}</div>
+                    <div class="stat-change">
+                        ${change5d !== undefined ? `
+                            <span class="${getChangeClass(change5d)}">
+                                5日: ${formatChange(change5d)}
+                            </span>
+                        ` : ''}
+                        ${changeYoy !== undefined ? `
+                            <span class="${getChangeClass(changeYoy)}">
+                                年: ${formatChange(changeYoy)}
+                            </span>
+                        ` : ''}
+                    </div>
+                    <div class="stat-meta">
+                        ${percentiles['1y'] !== undefined ? `1年百分位: ${percentiles['1y']}%` : ''}
+                        ${latest.date ? ` | ${latest.date}` : ''}
+                        ${sourceInfo ? `<br>📊 ${sourceInfo}` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // ========== 图表渲染 ==========
+        function renderChart(id) {
+            const data = allData[id];
+            if (!data || !data.series || data.series.length === 0) return;
+            
+            currentMetric = id;
+            
+            const metadata = data.metadata || {};
+            
+            // 更新标题和元数据
+            document.getElementById('chartTitle').textContent = 
+                `📈 ${data.name_zh} - 历史走势`;
+            
+            // 图表元数据
+            let metaHtml = '';
+            if (metadata.source) {
+                metaHtml += `数据源: ${metadata.source}`;
+                if (metadata.symbol) {
+                    metaHtml += ` | 代码: ${metadata.symbol}`;
+                }
+                if (metadata.fred_page) {
+                    metaHtml = `数据源: <a href="${metadata.fred_page}" target="_blank">${metadata.source}</a> | 代码: ${metadata.series_id}`;
+                } else if (metadata.source_url) {
+                    metaHtml = `数据源: <a href="${metadata.source_url}" target="_blank">${metadata.source}</a>`;
+                }
+            }
+            document.getElementById('chartMeta').innerHTML = metaHtml;
+            
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            
+            if (chart) {
+                chart.destroy();
+            }
+            
+            // 取最近 180 天数据
+            const recentSeries = data.series.slice(-180);
+            
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: recentSeries.map(s => s.date),
+                    datasets: [{
+                        label: `${data.name_zh} (${data.unit})`,
+                        data: recentSeries.map(s => s.value),
+                        borderColor: '#ffd700',
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#ffd700',
+                            bodyColor: '#fff',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${data.name_zh}: ${context.parsed.y.toLocaleString()} ${data.unit}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { 
+                                color: 'rgba(255,255,255,0.7)',
+                                callback: function(value) {
+                                    return value.toLocaleString() + ' ' + data.unit;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { 
+                                color: 'rgba(255,255,255,0.7)',
+                                maxTicksLimit: 10
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ========== 初始化 ==========
+        async function init() {
+            // 并行加载实时价格和历史数据
+            await Promise.all([
+                fetchRealtimePrices(),
+                loadData()
+            ]);
+        }
+        
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+name: Update Gold Dashboard Data
+
+on:
+  schedule:
+    # 每小时更新一次（整点）
+    # Updated: 2026-04-03 - Reactivate schedule
+    - cron: '0 * * * *'
+  workflow_dispatch: # 手动触发
+  push:
+    paths:
+      - 'scripts/fetch-data.js'
+      - '.github/workflows/update-data.yml'
+
+env:
+  # 提前使用 Node.js 24，避免废弃警告
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 允许推送代码
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Fetch latest data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          echo "🚀 开始更新黄金看板数据..."
+          node scripts/fetch-data.js
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git add data/*.json
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "chore: update gold dashboard data [skip ci]"
+          git push
+      
+      - name: Summary
+        run: |
+          echo "📊 数据更新完成！"
+          echo "更新时间: $(date '+%Y-%m-%d %H:%M:%S UTC')"
