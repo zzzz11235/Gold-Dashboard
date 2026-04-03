@@ -40,6 +40,9 @@ const FRED_SERIES = {
   
   // 汇率
   'DEXCHUS': { name_zh: '美元兑人民币', unit: '汇率', section: '美元与流动性', direction: 'negative' },
+  
+  // 历史洞察新增
+  'WALCL': { name_zh: '美联储总资产', unit: '百万美元', section: '历史洞察', direction: 'neutral' },
 };
 
 // ========== 工具函数 ==========
@@ -495,6 +498,128 @@ async function main() {
   } else {
     results.failed.push('SP500_GOLD_RATIO');
     console.log('⚠️  无法计算标普500/黄金比率（缺少数据）\n');
+  }
+  
+  // ========== 新增：原油、比特币、美联储资产负债表 ==========
+  
+  // 8. 获取原油期货 (CL=F)
+  const oilFuturesData = await fetchGoldData('CL=F', {
+    id: 'OIL_FUTURES',
+    name_zh: '原油期货',
+    name_en: 'Crude Oil Futures (CL=F)',
+    unit: '美元/桶',
+    description: '纽约商品交易所(NYMEX)WTI原油期货连续合约',
+    notes: '西德克萨斯轻质原油，美国基准原油'
+  });
+  
+  if (oilFuturesData) {
+    fs.writeFileSync(
+      path.join(DATA_DIR, 'OIL_FUTURES.json'),
+      JSON.stringify(oilFuturesData, null, 2)
+    );
+    results.success.push('OIL_FUTURES');
+    console.log('✅ OIL_FUTURES (CL=F) 已保存\n');
+  } else {
+    results.failed.push('OIL_FUTURES');
+  }
+  
+  // 9. 获取比特币 (BTC-USD)
+  const bitcoinData = await fetchGoldData('BTC-USD', {
+    id: 'BITCOIN_USD',
+    name_zh: '比特币',
+    name_en: 'Bitcoin (BTC-USD)',
+    unit: '美元',
+    description: '比特币兑美元汇率',
+    notes: '市值最大的加密货币，2009年创世'
+  });
+  
+  if (bitcoinData) {
+    fs.writeFileSync(
+      path.join(DATA_DIR, 'BITCOIN_USD.json'),
+      JSON.stringify(bitcoinData, null, 2)
+    );
+    results.success.push('BITCOIN_USD');
+    console.log('✅ BITCOIN_USD 已保存\n');
+  } else {
+    results.failed.push('BITCOIN_USD');
+  }
+  
+  // 10. 计算金油比 (Gold/Oil Ratio)
+  if (goldFuturesData && oilFuturesData) {
+    const goldOilRatio = {
+      id: 'GOLD_OIL_RATIO',
+      name_zh: '金油比',
+      name_en: 'Gold/Oil Ratio',
+      unit: '倍数',
+      section: '历史洞察',
+      direction: 'neutral',
+      thresholds: null,
+      
+      metadata: {
+        source: 'Calculated from Yahoo Finance (GC=F / CL=F)',
+        source_url: 'https://finance.yahoo.com',
+        description: '买一盎司黄金需要多少桶原油',
+        update_frequency: '每日',
+        historical_mean: 15,
+        notes: '长期均值约15，超过25预示经济衰退，低于10预示通胀风险'
+      },
+      
+      updated: new Date().toISOString().split('T')[0],
+      latest: {
+        date: goldFuturesData.latest.date,
+        value: goldFuturesData.latest.value / oilFuturesData.latest.value
+      },
+      series: goldFuturesData.series.map((item, i) => ({
+        date: item.date,
+        value: item.value / (oilFuturesData.series[i]?.value || item.value)
+      })).filter((item, i) => oilFuturesData.series[i] && oilFuturesData.series[i].value > 0)
+    };
+    
+    goldOilRatio.changes = calculateChanges(goldOilRatio.series);
+    goldOilRatio.percentiles = calculatePercentiles(goldOilRatio.series);
+    
+    fs.writeFileSync(
+      path.join(DATA_DIR, 'GOLD_OIL_RATIO.json'),
+      JSON.stringify(goldOilRatio, null, 2)
+    );
+    results.success.push('GOLD_OIL_RATIO');
+    console.log(`✅ GOLD_OIL_RATIO 已保存 (最新: ${goldOilRatio.latest.value.toFixed(2)})\n`);
+  } else {
+    results.failed.push('GOLD_OIL_RATIO');
+    console.log('⚠️  无法计算金油比（缺少数据）\n');
+  }
+  
+  // 11. 获取大类资产 ETF 数据
+  const assetETFs = [
+    { symbol: 'SPY', name: '标普500 ETF', id: 'SPY_ETF' },
+    { symbol: 'QQQ', name: '纳斯达克100 ETF', id: 'QQQ_ETF' },
+    { symbol: 'TLT', name: '20年+国债ETF', id: 'TLT_ETF' },
+    { symbol: 'IEF', name: '7-10年国债ETF', id: 'IEF_ETF' },
+    { symbol: 'SHV', name: '短期国债ETF', id: 'SHV_ETF' }
+  ];
+  
+  for (const etf of assetETFs) {
+    const etfData = await fetchGoldData(etf.symbol, {
+      id: etf.id,
+      name_zh: etf.name,
+      name_en: `${etf.symbol} ETF`,
+      unit: '美元',
+      description: `${etf.name} (SPDR)`,
+      notes: '用于资产配置对比'
+    });
+    
+    if (etfData) {
+      fs.writeFileSync(
+        path.join(DATA_DIR, `${etf.id}.json`),
+        JSON.stringify(etfData, null, 2)
+      );
+      results.success.push(etf.id);
+      console.log(`✅ ${etf.id} (${etf.symbol}) 已保存\n`);
+    } else {
+      results.failed.push(etf.id);
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, 300));
   }
   
   // 4. 获取所有 FRED 指标

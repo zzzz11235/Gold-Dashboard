@@ -168,6 +168,134 @@
             </div>
             <div class="source">数据来源：Yahoo Finance (GC=F, SI=F) | Macrotrends (历史数据)</div>
         </div>
+        
+        <!-- 金价 vs 油价 -->
+        <div class="insight-section" id="gold-vs-oil">
+            <div class="insight-header">
+                <div>
+                    <div class="insight-title">金价 vs 油价</div>
+                    <div class="insight-subtitle">1946 – 至今</div>
+                </div>
+                <div>
+                    <div style="color: #ffd700;">金价 <span id="gold-price-oil">加载中...</span></div>
+                    <div style="color: #8b4513;">油价 <span id="oil-price">加载中...</span></div>
+                </div>
+            </div>
+            <div class="dual-axis-container">
+                <canvas id="goldOilChart"></canvas>
+            </div>
+            <div class="description">
+                黄金与原油长期正相关（都受美元和通胀预期驱动），但阶段性会脱钩。
+                脱钩时段往往揭示哪个因子主导了定价——是通胀预期、地缘风险还是美元走势。
+            </div>
+            <div class="source">数据来源：Yahoo Finance (GC=F, CL=F) | FRED (DCOILWTICO)</div>
+        </div>
+        
+        <!-- 黄金 vs 比特币 -->
+        <div class="insight-section" id="gold-vs-bitcoin">
+            <div class="insight-header">
+                <div>
+                    <div class="insight-title">金价 vs 比特币</div>
+                    <div class="insight-subtitle">2010 – 至今（对数坐标）</div>
+                </div>
+                <div>
+                    <div style="color: #ffd700;">黄金 $<span id="gold-price-btc">加载中...</span></div>
+                    <div style="color: #f7931a;">比特币 $<span id="btc-price">加载中...</span></div>
+                </div>
+            </div>
+            <div class="dual-axis-container">
+                <canvas id="goldBitcoinChart"></canvas>
+            </div>
+            <div class="description">
+                比特币与黄金的价格走势对比。两者都是「去中心化」的价值存储叙事，但波动率差异巨大。
+                对数视角下能更清晰地看到两者的长期走势结构。
+            </div>
+            <div class="source">数据来源：Yahoo Finance (GC=F, BTC-USD)</div>
+        </div>
+        
+        <!-- 美联储资产负债表 vs 金价 -->
+        <div class="insight-section" id="fed-vs-gold">
+            <div class="insight-header">
+                <div>
+                    <div class="insight-title">美联储资产负债表 vs 金价</div>
+                    <div class="insight-subtitle">2003 – 至今</div>
+                </div>
+                <div>
+                    <div style="color: #60a5fa;">美联储总资产 <span id="fed-assets">加载中...</span></div>
+                    <div style="color: #ffd700;">金价 <span id="gold-price-fed">加载中...</span></div>
+                </div>
+            </div>
+            <div class="dual-axis-container">
+                <canvas id="fedGoldChart"></canvas>
+            </div>
+            <div class="description">
+                美联储总资产（蓝线）与金价走势对比。2008年后每轮QE扩表都伴随金价上涨，
+                2022年缩表期间金价却创新高（央行购金对冲）。这张图是理解「货币超发 → 黄金重估」逻辑的核心证据。
+            </div>
+            <div class="source">数据来源：FRED (WALCL) | Yahoo Finance (GC=F)</div>
+        </div>
+        
+        <!-- 黄金 vs 大类资产回报 -->
+        <div class="insight-section" id="gold-vs-assets">
+            <div class="insight-header">
+                <div>
+                    <div class="insight-title">黄金 vs 大类资产回报</div>
+                    <div class="insight-subtitle">年化收益率对比</div>
+                </div>
+            </div>
+            <div class="chart-container" style="height: auto;">
+                <canvas id="assetReturnsChart"></canvas>
+            </div>
+            <div style="margin-top: 20px;">
+                <table class="asset-table" id="assetTable">
+                    <thead>
+                        <tr>
+                            <th>资产</th>
+                            <th>1年年化</th>
+                            <th>3年年化</th>
+                            <th>5年年化</th>
+                            <th>10年年化</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="5" style="text-align: center; color: rgba(255,255,255,0.5);">数据加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <style>
+                .asset-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 15px;
+                }
+                .asset-table th, .asset-table td {
+                    padding: 12px;
+                    text-align: center;
+                    border-bottom: 1px solid rgba(255,255,255,0.1);
+                }
+                .asset-table th {
+                    color: #ffd700;
+                    font-weight: 600;
+                }
+                .asset-table td {
+                    color: rgba(255,255,255,0.8);
+                }
+                .positive-return {
+                    color: #4ade80;
+                }
+                .negative-return {
+                    color: #f87171;
+                }
+            </style>
+            <div class="description">
+                各时间窗口下黄金与主要资产类别的年化回报对比。
+                数据基于各 ETF 的调整后收盘价计算。
+                下划线 = 该窗口表现最佳。
+            </div>
+            <div class="source">
+                数据来源：Yahoo Finance (GC=F, SPY, QQQ, TLT, IEF, SHV)
+            </div>
+        </div>
     </div>
     
     <script>
@@ -409,12 +537,389 @@
             });
         }
         
+        // 4. 金价 vs 油价
+        async function initGoldOilChart() {
+            const goldData = await loadData('GOLD_FUTURES.json');
+            const oilData = await loadData('OIL_FUTURES.json');
+            
+            if (!goldData || !oilData) return;
+            
+            const goldPrices = goldData.series
+                .filter(d => d.value && !isNaN(d.value))
+                .map(d => ({ x: new Date(d.date), y: parseFloat(d.value) }));
+            
+            const oilPrices = oilData.series
+                .filter(d => d.value && !isNaN(d.value))
+                .map(d => ({ x: new Date(d.date), y: parseFloat(d.value) }));
+            
+            const latestGold = goldPrices[goldPrices.length - 1]?.y;
+            const latestOil = oilPrices[oilPrices.length - 1]?.y;
+            
+            document.getElementById('gold-price-oil').textContent = `$${formatNumber(latestGold)}`;
+            document.getElementById('oil-price').textContent = `$${formatNumber(latestOil)}`;
+            
+            new Chart(document.getElementById('goldOilChart'), {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: '金价 (美元/盎司)',
+                        data: goldPrices,
+                        borderColor: '#ffd700',
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        borderWidth: 2,
+                        yAxisID: 'y',
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }, {
+                        label: '油价 (美元/桶)',
+                        data: oilPrices,
+                        borderColor: '#8b4513',
+                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                        borderWidth: 2,
+                        yAxisID: 'y1',
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: $${formatNumber(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'year', displayFormats: { year: 'yyyy' } },
+                            title: { display: true, text: '年份' }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: '金价 (美元)', color: '#ffd700' },
+                            ticks: { color: '#ffd700' },
+                            grid: { color: 'rgba(255,215,0,0.1)' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: '油价 (美元)', color: '#8b4513' },
+                            ticks: { color: '#8b4513' },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 5. 金价 vs 比特币（对数坐标）
+        async function initGoldBitcoinChart() {
+            const goldData = await loadData('GOLD_FUTURES.json');
+            const bitcoinData = await loadData('BITCOIN_USD.json');
+            
+            if (!goldData || !bitcoinData) return;
+            
+            const goldPrices = goldData.series
+                .filter(d => d.value && !isNaN(d.value))
+                .map(d => ({ x: new Date(d.date), y: parseFloat(d.value) }));
+            
+            const btcPrices = bitcoinData.series
+                .filter(d => d.value && !isNaN(d.value) && parseFloat(d.value) > 0)
+                .map(d => ({ x: new Date(d.date), y: parseFloat(d.value) }));
+            
+            const latestGold = goldPrices[goldPrices.length - 1]?.y;
+            const latestBtc = btcPrices[btcPrices.length - 1]?.y;
+            
+            document.getElementById('gold-price-btc').textContent = formatNumber(latestGold, 0);
+            document.getElementById('btc-price').textContent = formatNumber(latestBtc, 0);
+            
+            new Chart(document.getElementById('goldBitcoinChart'), {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: '金价 (美元)',
+                        data: goldPrices,
+                        borderColor: '#ffd700',
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        borderWidth: 2,
+                        yAxisID: 'y',
+                        fill: false,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }, {
+                        label: '比特币 (美元)',
+                        data: btcPrices,
+                        borderColor: '#f7931a',
+                        backgroundColor: 'rgba(247, 147, 26, 0.1)',
+                        borderWidth: 2,
+                        yAxisID: 'y1',
+                        fill: false,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const val = ctx.parsed.y;
+                                    if (val > 1000) {
+                                        return `${ctx.dataset.label}: $${formatNumber(val, 0)}`;
+                                    }
+                                    return `${ctx.dataset.label}: $${formatNumber(val, 2)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'year', displayFormats: { year: 'yyyy' } },
+                            title: { display: true, text: '年份' }
+                        },
+                        y: {
+                            type: 'logarithmic',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: '金价 (美元)', color: '#ffd700' },
+                            ticks: { 
+                                color: '#ffd700',
+                                callback: (value) => '$' + value.toLocaleString()
+                            },
+                            grid: { color: 'rgba(255,215,0,0.1)' }
+                        },
+                        y1: {
+                            type: 'logarithmic',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: '比特币 (美元)', color: '#f7931a' },
+                            ticks: { 
+                                color: '#f7931a',
+                                callback: (value) => {
+                                    if (value >= 1000) return '$' + (value/1000).toFixed(0) + 'K';
+                                    return '$' + value;
+                                }
+                            },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 6. 美联储资产负债表 vs 金价
+        async function initFedGoldChart() {
+            const goldData = await loadData('GOLD_FUTURES.json');
+            const fedData = await loadData('WALCL.json');
+            
+            if (!goldData || !fedData) return;
+            
+            const goldPrices = goldData.series
+                .filter(d => d.value && !isNaN(d.value))
+                .map(d => ({ x: new Date(d.date), y: parseFloat(d.value) }));
+            
+            const fedAssets = fedData.series
+                .filter(d => d.value && !isNaN(d.value))
+                .map(d => ({ 
+                    x: new Date(d.date), 
+                    y: parseFloat(d.value) / 1000000 // 百万美元 -> 万亿美元
+                }));
+            
+            const latestGold = goldPrices[goldPrices.length - 1]?.y;
+            const latestFed = fedAssets[fedAssets.length - 1]?.y;
+            
+            document.getElementById('gold-price-fed').textContent = `$${formatNumber(latestGold)}`;
+            document.getElementById('fed-assets').textContent = `${formatNumber(latestFed, 2)}万亿`;
+            
+            new Chart(document.getElementById('fedGoldChart'), {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: '美联储总资产 (万亿美元)',
+                        data: fedAssets,
+                        borderColor: '#60a5fa',
+                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                        borderWidth: 2,
+                        yAxisID: 'y',
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }, {
+                        label: '金价 (美元/盎司)',
+                        data: goldPrices,
+                        borderColor: '#ffd700',
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        borderWidth: 2,
+                        yAxisID: 'y1',
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const val = ctx.parsed.y;
+                                    if (ctx.dataset.label.includes('美联储')) {
+                                        return `${ctx.dataset.label}: $${formatNumber(val, 2)}万亿`;
+                                    }
+                                    return `${ctx.dataset.label}: $${formatNumber(val, 2)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'year', displayFormats: { year: 'yyyy' } },
+                            title: { display: true, text: '年份' }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: '美联储总资产 (万亿美元)', color: '#60a5fa' },
+                            ticks: { 
+                                color: '#60a5fa',
+                                callback: (value) => '$' + value + 'T'
+                            },
+                            grid: { color: 'rgba(96,165,250,0.1)' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: '金价 (美元)', color: '#ffd700' },
+                            ticks: { 
+                                color: '#ffd700',
+                                callback: (value) => '$' + value.toLocaleString()
+                            },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 7. 大类资产回报对比
+        async function initAssetReturnsTable() {
+            const assets = [
+                { id: 'GOLD_FUTURES', name: '🥇 黄金', symbol: 'GC=F' },
+                { id: 'SPY_ETF', name: '标普500', symbol: 'SPY' },
+                { id: 'QQQ_ETF', name: '纳斯达克100', symbol: 'QQQ' },
+                { id: 'TLT_ETF', name: '美国长期国债', symbol: 'TLT' },
+                { id: 'IEF_ETF', name: '美国中期国债', symbol: 'IEF' },
+                { id: 'SHV_ETF', name: '短期国债(现金)', symbol: 'SHV' }
+            ];
+            
+            const periods = [
+                { years: 1, label: '1年' },
+                { years: 3, label: '3年' },
+                { years: 5, label: '5年' },
+                { years: 10, label: '10年' }
+            ];
+            
+            // 加载所有资产数据
+            const assetData = {};
+            for (const asset of assets) {
+                const data = await loadData(`${asset.id}.json`);
+                if (data && data.series) {
+                    assetData[asset.id] = data.series
+                        .filter(d => d.value && !isNaN(d.value))
+                        .map(d => ({ date: new Date(d.date), value: parseFloat(d.value) }));
+                }
+            }
+            
+            // 计算年化收益率
+            function calcAnnualizedReturn(series, years) {
+                if (!series || series.length < 2) return null;
+                
+                const now = series[series.length - 1].date;
+                const startDate = new Date(now.getTime() - years * 365.25 * 24 * 60 * 60 * 1000);
+                
+                const startPrice = series.find(d => d.date >= startDate)?.value;
+                const endPrice = series[series.length - 1].value;
+                
+                if (!startPrice || !endPrice) return null;
+                
+                const totalReturn = (endPrice - startPrice) / startPrice;
+                const annualizedReturn = (Math.pow(1 + totalReturn, 1 / years) - 1) * 100;
+                
+                return annualizedReturn;
+            }
+            
+            // 构建表格数据
+            const tableBody = document.querySelector('#assetTable tbody');
+            let html = '';
+            
+            // 找出每个时间段的最佳表现
+            const bestReturns = {};
+            periods.forEach(period => {
+                const returns = {};
+                assets.forEach(asset => {
+                    const ret = calcAnnualizedReturn(assetData[asset.id], period.years);
+                    if (ret !== null) returns[asset.id] = ret;
+                });
+                
+                const maxReturn = Math.max(...Object.values(returns));
+                bestReturns[period.years] = Object.keys(returns).filter(id => returns[id] === maxReturn);
+            });
+            
+            // 生成表格行
+            assets.forEach(asset => {
+                html += `<tr><td style="text-align: left; font-weight: 600;">${asset.name}</td>`;
+                
+                periods.forEach(period => {
+                    const ret = calcAnnualizedReturn(assetData[asset.id], period.years);
+                    const isBest = bestReturns[period.years]?.includes(asset.id);
+                    
+                    let cellClass = ret >= 0 ? 'positive-return' : 'negative-return';
+                    let cellStyle = isBest ? 'text-decoration: underline; font-weight: bold;' : '';
+                    
+                    if (ret !== null) {
+                        html += `<td class="${cellClass}" style="${cellStyle}">${ret >= 0 ? '+' : ''}${ret.toFixed(1)}%</td>`;
+                    } else {
+                        html += `<td style="color: rgba(255,255,255,0.3);">—</td>`;
+                    }
+                });
+                
+                html += '</tr>';
+            });
+            
+            tableBody.innerHTML = html;
+        }
+        
         // 初始化所有图表
         async function init() {
             await Promise.all([
                 initSP500GoldRatio(),
                 initGoldSilverRatio(),
-                initGoldSilverPrice()
+                initGoldSilverPrice(),
+                initGoldOilChart(),
+                initGoldBitcoinChart(),
+                initFedGoldChart(),
+                initAssetReturnsTable()
             ]);
         }
         
