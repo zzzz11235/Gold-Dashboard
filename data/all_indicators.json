@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-10T19:59:35.581Z",
+  "updated": "2026-04-10T22:01:25.174Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -87,11 +87,6 @@
       "status": "success"
     },
     {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
-      "status": "success"
-    },
-    {
       "id": "DTWEXBGS",
       "name_zh": "美元指数",
       "status": "success"
@@ -107,28 +102,13 @@
       "status": "success"
     },
     {
-      "id": "UNRATE",
-      "name_zh": "失业率",
-      "status": "success"
-    },
-    {
       "id": "GFDEBTN",
       "name_zh": "联邦债务总额",
       "status": "success"
     },
     {
-      "id": "GFDEGDQ188S",
-      "name_zh": "债务/GDP",
-      "status": "success"
-    },
-    {
       "id": "FYFSGDA188S",
       "name_zh": "财政赤字/GDP",
-      "status": "success"
-    },
-    {
-      "id": "FEDFUNDS",
-      "name_zh": "联邦基金利率",
       "status": "success"
     },
     {
@@ -145,6 +125,26 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
+    },
+    {
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
+      "status": "failed"
+    },
+    {
+      "id": "UNRATE",
+      "name_zh": "失业率",
+      "status": "failed"
+    },
+    {
+      "id": "GFDEGDQ188S",
+      "name_zh": "债务/GDP",
+      "status": "failed"
+    },
+    {
+      "id": "FEDFUNDS",
+      "name_zh": "联邦基金利率",
+      "status": "failed"
     }
   ]
 }
