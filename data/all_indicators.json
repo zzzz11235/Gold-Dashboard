@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-11T00:05:27.533Z",
+  "updated": "2026-04-11T05:44:27.233Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,6 +77,11 @@
       "status": "success"
     },
     {
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
+      "status": "success"
+    },
+    {
       "id": "DFII5",
       "name_zh": "5年TIPS实际收益率",
       "status": "success"
@@ -140,11 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
-      "status": "failed"
     }
   ]
 }
