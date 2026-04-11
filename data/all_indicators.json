@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-10T22:01:25.174Z",
+  "updated": "2026-04-11T00:05:27.533Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,13 +77,13 @@
       "status": "success"
     },
     {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
+      "id": "DFII5",
+      "name_zh": "5年TIPS实际收益率",
       "status": "success"
     },
     {
-      "id": "DFII5",
-      "name_zh": "5年TIPS实际收益率",
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
       "status": "success"
     },
     {
@@ -102,13 +102,28 @@
       "status": "success"
     },
     {
+      "id": "UNRATE",
+      "name_zh": "失业率",
+      "status": "success"
+    },
+    {
       "id": "GFDEBTN",
       "name_zh": "联邦债务总额",
       "status": "success"
     },
     {
+      "id": "GFDEGDQ188S",
+      "name_zh": "债务/GDP",
+      "status": "success"
+    },
+    {
       "id": "FYFSGDA188S",
       "name_zh": "财政赤字/GDP",
+      "status": "success"
+    },
+    {
+      "id": "FEDFUNDS",
+      "name_zh": "联邦基金利率",
       "status": "success"
     },
     {
@@ -127,23 +142,8 @@
       "status": "success"
     },
     {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
-      "status": "failed"
-    },
-    {
-      "id": "UNRATE",
-      "name_zh": "失业率",
-      "status": "failed"
-    },
-    {
-      "id": "GFDEGDQ188S",
-      "name_zh": "债务/GDP",
-      "status": "failed"
-    },
-    {
-      "id": "FEDFUNDS",
-      "name_zh": "联邦基金利率",
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
       "status": "failed"
     }
   ]
