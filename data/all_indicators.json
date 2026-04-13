@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-13T20:15:18.303Z",
+  "updated": "2026-04-13T23:30:49.633Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,18 +77,28 @@
       "status": "success"
     },
     {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
+      "id": "DFII5",
+      "name_zh": "5年TIPS实际收益率",
       "status": "success"
     },
     {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
       "status": "success"
     },
     {
-      "id": "IPMAN",
-      "name_zh": "工业生产指数",
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
+      "status": "success"
+    },
+    {
+      "id": "UNRATE",
+      "name_zh": "失业率",
+      "status": "success"
+    },
+    {
+      "id": "GFDEGDQ188S",
+      "name_zh": "债务/GDP",
       "status": "success"
     },
     {
@@ -102,33 +112,23 @@
       "status": "success"
     },
     {
-      "id": "GVZCLS",
-      "name_zh": "黄金波动率",
+      "id": "WALCL",
+      "name_zh": "美联储总资产",
       "status": "success"
     },
     {
-      "id": "DEXCHUS",
-      "name_zh": "美元兑人民币",
-      "status": "success"
-    },
-    {
-      "id": "DFII5",
-      "name_zh": "5年TIPS实际收益率",
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
       "status": "failed"
     },
     {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
       "status": "failed"
     },
     {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
-      "status": "failed"
-    },
-    {
-      "id": "UNRATE",
-      "name_zh": "失业率",
+      "id": "IPMAN",
+      "name_zh": "工业生产指数",
       "status": "failed"
     },
     {
@@ -137,13 +137,13 @@
       "status": "failed"
     },
     {
-      "id": "GFDEGDQ188S",
-      "name_zh": "债务/GDP",
+      "id": "GVZCLS",
+      "name_zh": "黄金波动率",
       "status": "failed"
     },
     {
-      "id": "WALCL",
-      "name_zh": "美联储总资产",
+      "id": "DEXCHUS",
+      "name_zh": "美元兑人民币",
       "status": "failed"
     }
   ]
