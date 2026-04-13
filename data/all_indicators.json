@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-13T16:41:18.377Z",
+  "updated": "2026-04-13T20:15:18.303Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -82,43 +82,13 @@
       "status": "success"
     },
     {
-      "id": "DFII5",
-      "name_zh": "5年TIPS实际收益率",
-      "status": "success"
-    },
-    {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
-      "status": "success"
-    },
-    {
       "id": "DTWEXBGS",
       "name_zh": "美元指数",
       "status": "success"
     },
     {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
-      "status": "success"
-    },
-    {
       "id": "IPMAN",
       "name_zh": "工业生产指数",
-      "status": "success"
-    },
-    {
-      "id": "UNRATE",
-      "name_zh": "失业率",
-      "status": "success"
-    },
-    {
-      "id": "GFDEBTN",
-      "name_zh": "联邦债务总额",
-      "status": "success"
-    },
-    {
-      "id": "GFDEGDQ188S",
-      "name_zh": "债务/GDP",
       "status": "success"
     },
     {
@@ -142,9 +112,39 @@
       "status": "success"
     },
     {
+      "id": "DFII5",
+      "name_zh": "5年TIPS实际收益率",
+      "status": "failed"
+    },
+    {
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
+      "status": "failed"
+    },
+    {
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
+      "status": "failed"
+    },
+    {
+      "id": "UNRATE",
+      "name_zh": "失业率",
+      "status": "failed"
+    },
+    {
+      "id": "GFDEBTN",
+      "name_zh": "联邦债务总额",
+      "status": "failed"
+    },
+    {
+      "id": "GFDEGDQ188S",
+      "name_zh": "债务/GDP",
+      "status": "failed"
+    },
+    {
       "id": "WALCL",
       "name_zh": "美联储总资产",
-      "status": "success"
+      "status": "failed"
     }
   ]
 }
