@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-23T16:55:28.817Z",
+  "updated": "2026-04-23T20:15:32.066Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,28 +77,13 @@
       "status": "success"
     },
     {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
-      "status": "success"
-    },
-    {
       "id": "DFII5",
       "name_zh": "5年TIPS实际收益率",
       "status": "success"
     },
     {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
-      "status": "success"
-    },
-    {
       "id": "DTWEXBGS",
       "name_zh": "美元指数",
-      "status": "success"
-    },
-    {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
       "status": "success"
     },
     {
@@ -127,23 +112,38 @@
       "status": "success"
     },
     {
-      "id": "FEDFUNDS",
-      "name_zh": "联邦基金利率",
-      "status": "success"
-    },
-    {
       "id": "GVZCLS",
       "name_zh": "黄金波动率",
       "status": "success"
     },
     {
-      "id": "WALCL",
-      "name_zh": "美联储总资产",
+      "id": "DEXCHUS",
+      "name_zh": "美元兑人民币",
       "status": "success"
     },
     {
-      "id": "DEXCHUS",
-      "name_zh": "美元兑人民币",
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
+      "status": "failed"
+    },
+    {
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
+      "status": "failed"
+    },
+    {
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
+      "status": "failed"
+    },
+    {
+      "id": "FEDFUNDS",
+      "name_zh": "联邦基金利率",
+      "status": "failed"
+    },
+    {
+      "id": "WALCL",
+      "name_zh": "美联储总资产",
       "status": "failed"
     }
   ]
