@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-24T06:31:01.330Z",
+  "updated": "2026-04-24T10:55:51.462Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -102,6 +102,11 @@
       "status": "success"
     },
     {
+      "id": "IPMAN",
+      "name_zh": "工业生产指数",
+      "status": "success"
+    },
+    {
       "id": "UNRATE",
       "name_zh": "失业率",
       "status": "success"
@@ -132,19 +137,14 @@
       "status": "success"
     },
     {
-      "id": "WALCL",
-      "name_zh": "美联储总资产",
+      "id": "DEXCHUS",
+      "name_zh": "美元兑人民币",
       "status": "success"
     },
     {
-      "id": "IPMAN",
-      "name_zh": "工业生产指数",
-      "status": "failed"
-    },
-    {
-      "id": "DEXCHUS",
-      "name_zh": "美元兑人民币",
-      "status": "failed"
+      "id": "WALCL",
+      "name_zh": "美联储总资产",
+      "status": "success"
     }
   ]
 }
