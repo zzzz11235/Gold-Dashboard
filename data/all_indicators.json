@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-27T11:52:18.412Z",
+  "updated": "2026-04-27T14:20:23.951Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,16 +77,6 @@
       "status": "success"
     },
     {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
-      "status": "success"
-    },
-    {
-      "id": "DFII5",
-      "name_zh": "5年TIPS实际收益率",
-      "status": "success"
-    },
-    {
       "id": "T10YIE",
       "name_zh": "10年盈亏平衡通胀",
       "status": "success"
@@ -97,33 +87,8 @@
       "status": "success"
     },
     {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
-      "status": "success"
-    },
-    {
-      "id": "IPMAN",
-      "name_zh": "工业生产指数",
-      "status": "success"
-    },
-    {
-      "id": "UNRATE",
-      "name_zh": "失业率",
-      "status": "success"
-    },
-    {
-      "id": "GFDEBTN",
-      "name_zh": "联邦债务总额",
-      "status": "success"
-    },
-    {
       "id": "GFDEGDQ188S",
       "name_zh": "债务/GDP",
-      "status": "success"
-    },
-    {
-      "id": "FYFSGDA188S",
-      "name_zh": "财政赤字/GDP",
       "status": "success"
     },
     {
@@ -132,19 +97,54 @@
       "status": "success"
     },
     {
-      "id": "GVZCLS",
-      "name_zh": "黄金波动率",
-      "status": "success"
-    },
-    {
       "id": "DEXCHUS",
       "name_zh": "美元兑人民币",
       "status": "success"
     },
     {
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
+      "status": "failed"
+    },
+    {
+      "id": "DFII5",
+      "name_zh": "5年TIPS实际收益率",
+      "status": "failed"
+    },
+    {
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
+      "status": "failed"
+    },
+    {
+      "id": "IPMAN",
+      "name_zh": "工业生产指数",
+      "status": "failed"
+    },
+    {
+      "id": "UNRATE",
+      "name_zh": "失业率",
+      "status": "failed"
+    },
+    {
+      "id": "GFDEBTN",
+      "name_zh": "联邦债务总额",
+      "status": "failed"
+    },
+    {
+      "id": "FYFSGDA188S",
+      "name_zh": "财政赤字/GDP",
+      "status": "failed"
+    },
+    {
+      "id": "GVZCLS",
+      "name_zh": "黄金波动率",
+      "status": "failed"
+    },
+    {
       "id": "WALCL",
       "name_zh": "美联储总资产",
-      "status": "success"
+      "status": "failed"
     }
   ]
 }
