@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-27T20:14:31.816Z",
+  "updated": "2026-04-27T22:01:10.243Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -92,21 +92,6 @@
       "status": "success"
     },
     {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
-      "status": "success"
-    },
-    {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
-      "status": "success"
-    },
-    {
-      "id": "IPMAN",
-      "name_zh": "工业生产指数",
-      "status": "success"
-    },
-    {
       "id": "UNRATE",
       "name_zh": "失业率",
       "status": "success"
@@ -145,6 +130,21 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
+    },
+    {
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
+      "status": "failed"
+    },
+    {
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
+      "status": "failed"
+    },
+    {
+      "id": "IPMAN",
+      "name_zh": "工业生产指数",
+      "status": "failed"
     }
   ]
 }
