@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-28T17:53:40.450Z",
+  "updated": "2026-04-28T19:52:21.450Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -144,7 +144,7 @@
     {
       "id": "WALCL",
       "name_zh": "美联储总资产",
-      "status": "failed"
+      "status": "success"
     }
   ]
 }
