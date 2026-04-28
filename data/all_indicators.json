@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-28T15:31:28.046Z",
+  "updated": "2026-04-28T17:53:40.450Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -82,8 +82,23 @@
       "status": "success"
     },
     {
+      "id": "DFII5",
+      "name_zh": "5年TIPS实际收益率",
+      "status": "success"
+    },
+    {
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
+      "status": "success"
+    },
+    {
       "id": "DTWEXBGS",
       "name_zh": "美元指数",
+      "status": "success"
+    },
+    {
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
       "status": "success"
     },
     {
@@ -129,21 +144,6 @@
     {
       "id": "WALCL",
       "name_zh": "美联储总资产",
-      "status": "success"
-    },
-    {
-      "id": "DFII5",
-      "name_zh": "5年TIPS实际收益率",
-      "status": "failed"
-    },
-    {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
-      "status": "failed"
-    },
-    {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
       "status": "failed"
     }
   ]
