@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-29T11:46:04.602Z",
+  "updated": "2026-04-29T14:23:33.780Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -92,23 +92,18 @@
       "status": "success"
     },
     {
-      "id": "IPMAN",
-      "name_zh": "工业生产指数",
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
       "status": "success"
     },
     {
-      "id": "GFDEBTN",
-      "name_zh": "联邦债务总额",
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
       "status": "success"
     },
     {
       "id": "GFDEGDQ188S",
       "name_zh": "债务/GDP",
-      "status": "success"
-    },
-    {
-      "id": "FYFSGDA188S",
-      "name_zh": "财政赤字/GDP",
       "status": "success"
     },
     {
@@ -132,18 +127,23 @@
       "status": "success"
     },
     {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
-      "status": "failed"
-    },
-    {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
+      "id": "IPMAN",
+      "name_zh": "工业生产指数",
       "status": "failed"
     },
     {
       "id": "UNRATE",
       "name_zh": "失业率",
+      "status": "failed"
+    },
+    {
+      "id": "GFDEBTN",
+      "name_zh": "联邦债务总额",
+      "status": "failed"
+    },
+    {
+      "id": "FYFSGDA188S",
+      "name_zh": "财政赤字/GDP",
       "status": "failed"
     }
   ]
