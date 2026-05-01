@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-01T21:02:39.933Z",
+  "updated": "2026-05-01T22:56:54.908Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -137,14 +137,14 @@
       "status": "success"
     },
     {
-      "id": "WALCL",
-      "name_zh": "美联储总资产",
+      "id": "DEXCHUS",
+      "name_zh": "美元兑人民币",
       "status": "success"
     },
     {
-      "id": "DEXCHUS",
-      "name_zh": "美元兑人民币",
-      "status": "failed"
+      "id": "WALCL",
+      "name_zh": "美联储总资产",
+      "status": "success"
     }
   ]
 }
