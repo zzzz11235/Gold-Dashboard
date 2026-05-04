@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-04T21:15:23.283Z",
+  "updated": "2026-05-04T23:02:00.025Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,6 +77,11 @@
       "status": "success"
     },
     {
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
+      "status": "success"
+    },
+    {
       "id": "DFII5",
       "name_zh": "5年TIPS实际收益率",
       "status": "success"
@@ -107,11 +112,6 @@
       "status": "success"
     },
     {
-      "id": "GFDEBTN",
-      "name_zh": "联邦债务总额",
-      "status": "success"
-    },
-    {
       "id": "GFDEGDQ188S",
       "name_zh": "债务/GDP",
       "status": "success"
@@ -119,6 +119,16 @@
     {
       "id": "FYFSGDA188S",
       "name_zh": "财政赤字/GDP",
+      "status": "success"
+    },
+    {
+      "id": "FEDFUNDS",
+      "name_zh": "联邦基金利率",
+      "status": "success"
+    },
+    {
+      "id": "GVZCLS",
+      "name_zh": "黄金波动率",
       "status": "success"
     },
     {
@@ -132,18 +142,8 @@
       "status": "success"
     },
     {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
-      "status": "failed"
-    },
-    {
-      "id": "FEDFUNDS",
-      "name_zh": "联邦基金利率",
-      "status": "failed"
-    },
-    {
-      "id": "GVZCLS",
-      "name_zh": "黄金波动率",
+      "id": "GFDEBTN",
+      "name_zh": "联邦债务总额",
       "status": "failed"
     }
   ]
