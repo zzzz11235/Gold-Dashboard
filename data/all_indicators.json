@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-04T23:02:00.025Z",
+  "updated": "2026-05-05T03:39:17.112Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -112,6 +112,11 @@
       "status": "success"
     },
     {
+      "id": "GFDEBTN",
+      "name_zh": "联邦债务总额",
+      "status": "success"
+    },
+    {
       "id": "GFDEGDQ188S",
       "name_zh": "债务/GDP",
       "status": "success"
@@ -140,11 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "GFDEBTN",
-      "name_zh": "联邦债务总额",
-      "status": "failed"
     }
   ]
 }
