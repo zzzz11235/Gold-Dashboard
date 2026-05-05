@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-05T18:17:30.739Z",
+  "updated": "2026-05-05T20:13:02.710Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,6 +77,11 @@
       "status": "success"
     },
     {
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
+      "status": "success"
+    },
+    {
       "id": "DFII5",
       "name_zh": "5年TIPS实际收益率",
       "status": "success"
@@ -84,6 +89,11 @@
     {
       "id": "T10YIE",
       "name_zh": "10年盈亏平衡通胀",
+      "status": "success"
+    },
+    {
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
       "status": "success"
     },
     {
@@ -99,6 +109,11 @@
     {
       "id": "UNRATE",
       "name_zh": "失业率",
+      "status": "success"
+    },
+    {
+      "id": "GFDEBTN",
+      "name_zh": "联邦债务总额",
       "status": "success"
     },
     {
@@ -130,21 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
-      "status": "failed"
-    },
-    {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
-      "status": "failed"
-    },
-    {
-      "id": "GFDEBTN",
-      "name_zh": "联邦债务总额",
-      "status": "failed"
     }
   ]
 }
