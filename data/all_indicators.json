@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-06T16:49:30.276Z",
+  "updated": "2026-05-06T18:25:06.970Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -107,11 +107,6 @@
       "status": "success"
     },
     {
-      "id": "UNRATE",
-      "name_zh": "失业率",
-      "status": "success"
-    },
-    {
       "id": "GFDEBTN",
       "name_zh": "联邦债务总额",
       "status": "success"
@@ -132,19 +127,24 @@
       "status": "success"
     },
     {
+      "id": "WALCL",
+      "name_zh": "美联储总资产",
+      "status": "success"
+    },
+    {
+      "id": "UNRATE",
+      "name_zh": "失业率",
+      "status": "failed"
+    },
+    {
       "id": "GVZCLS",
       "name_zh": "黄金波动率",
-      "status": "success"
+      "status": "failed"
     },
     {
       "id": "DEXCHUS",
       "name_zh": "美元兑人民币",
-      "status": "success"
-    },
-    {
-      "id": "WALCL",
-      "name_zh": "美联储总资产",
-      "status": "success"
+      "status": "failed"
     }
   ]
 }
