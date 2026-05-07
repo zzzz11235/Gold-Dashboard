@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-07T11:55:52.034Z",
+  "updated": "2026-05-07T14:40:19.027Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,11 +77,6 @@
       "status": "success"
     },
     {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
-      "status": "success"
-    },
-    {
       "id": "DFII5",
       "name_zh": "5年TIPS实际收益率",
       "status": "success"
@@ -117,11 +112,6 @@
       "status": "success"
     },
     {
-      "id": "GFDEGDQ188S",
-      "name_zh": "债务/GDP",
-      "status": "success"
-    },
-    {
       "id": "FYFSGDA188S",
       "name_zh": "财政赤字/GDP",
       "status": "success"
@@ -142,9 +132,19 @@
       "status": "success"
     },
     {
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
+      "status": "failed"
+    },
+    {
+      "id": "GFDEGDQ188S",
+      "name_zh": "债务/GDP",
+      "status": "failed"
+    },
+    {
       "id": "WALCL",
       "name_zh": "美联储总资产",
-      "status": "success"
+      "status": "failed"
     }
   ]
 }
