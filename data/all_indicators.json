@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-08T00:01:12.395Z",
+  "updated": "2026-05-08T04:19:26.501Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -82,6 +82,16 @@
       "status": "success"
     },
     {
+      "id": "DFII5",
+      "name_zh": "5年TIPS实际收益率",
+      "status": "success"
+    },
+    {
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
+      "status": "success"
+    },
+    {
       "id": "DTWEXBGS",
       "name_zh": "美元指数",
       "status": "success"
@@ -112,8 +122,18 @@
       "status": "success"
     },
     {
+      "id": "FYFSGDA188S",
+      "name_zh": "财政赤字/GDP",
+      "status": "success"
+    },
+    {
       "id": "FEDFUNDS",
       "name_zh": "联邦基金利率",
+      "status": "success"
+    },
+    {
+      "id": "GVZCLS",
+      "name_zh": "黄金波动率",
       "status": "success"
     },
     {
@@ -125,26 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "DFII5",
-      "name_zh": "5年TIPS实际收益率",
-      "status": "failed"
-    },
-    {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
-      "status": "failed"
-    },
-    {
-      "id": "FYFSGDA188S",
-      "name_zh": "财政赤字/GDP",
-      "status": "failed"
-    },
-    {
-      "id": "GVZCLS",
-      "name_zh": "黄金波动率",
-      "status": "failed"
     }
   ]
 }
