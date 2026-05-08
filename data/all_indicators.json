@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-08T16:24:56.158Z",
+  "updated": "2026-05-08T18:16:32.170Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,18 +77,18 @@
       "status": "success"
     },
     {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
-      "status": "success"
-    },
-    {
-      "id": "DFII5",
-      "name_zh": "5年TIPS实际收益率",
-      "status": "success"
-    },
-    {
       "id": "T10YIE",
       "name_zh": "10年盈亏平衡通胀",
+      "status": "success"
+    },
+    {
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
+      "status": "success"
+    },
+    {
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
       "status": "success"
     },
     {
@@ -107,13 +107,8 @@
       "status": "success"
     },
     {
-      "id": "FYFSGDA188S",
-      "name_zh": "财政赤字/GDP",
-      "status": "success"
-    },
-    {
-      "id": "FEDFUNDS",
-      "name_zh": "联邦基金利率",
+      "id": "GFDEGDQ188S",
+      "name_zh": "债务/GDP",
       "status": "success"
     },
     {
@@ -132,18 +127,23 @@
       "status": "success"
     },
     {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
       "status": "failed"
     },
     {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
+      "id": "DFII5",
+      "name_zh": "5年TIPS实际收益率",
       "status": "failed"
     },
     {
-      "id": "GFDEGDQ188S",
-      "name_zh": "债务/GDP",
+      "id": "FYFSGDA188S",
+      "name_zh": "财政赤字/GDP",
+      "status": "failed"
+    },
+    {
+      "id": "FEDFUNDS",
+      "name_zh": "联邦基金利率",
       "status": "failed"
     }
   ]
