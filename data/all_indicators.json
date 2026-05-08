@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-08T14:58:46.869Z",
+  "updated": "2026-05-08T16:24:56.158Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -87,8 +87,8 @@
       "status": "success"
     },
     {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
       "status": "success"
     },
     {
@@ -104,11 +104,6 @@
     {
       "id": "GFDEBTN",
       "name_zh": "联邦债务总额",
-      "status": "success"
-    },
-    {
-      "id": "GFDEGDQ188S",
-      "name_zh": "债务/GDP",
       "status": "success"
     },
     {
@@ -137,13 +132,18 @@
       "status": "success"
     },
     {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
       "status": "failed"
     },
     {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
+      "status": "failed"
+    },
+    {
+      "id": "GFDEGDQ188S",
+      "name_zh": "债务/GDP",
       "status": "failed"
     }
   ]
