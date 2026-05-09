@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-08T22:05:24.367Z",
+  "updated": "2026-05-09T00:03:03.190Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -137,13 +137,13 @@
       "status": "success"
     },
     {
-      "id": "FYFSGDA188S",
-      "name_zh": "财政赤字/GDP",
-      "status": "failed"
-    },
-    {
       "id": "WALCL",
       "name_zh": "美联储总资产",
+      "status": "success"
+    },
+    {
+      "id": "FYFSGDA188S",
+      "name_zh": "财政赤字/GDP",
       "status": "failed"
     }
   ]
