@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-11T16:08:56.141Z",
+  "updated": "2026-05-11T19:03:36.178Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -87,16 +87,6 @@
       "status": "success"
     },
     {
-      "id": "T10YIE",
-      "name_zh": "10年盈亏平衡通胀",
-      "status": "success"
-    },
-    {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
-      "status": "success"
-    },
-    {
       "id": "IPMAN",
       "name_zh": "工业生产指数",
       "status": "success"
@@ -122,6 +112,16 @@
       "status": "success"
     },
     {
+      "id": "FEDFUNDS",
+      "name_zh": "联邦基金利率",
+      "status": "success"
+    },
+    {
+      "id": "GVZCLS",
+      "name_zh": "黄金波动率",
+      "status": "success"
+    },
+    {
       "id": "DEXCHUS",
       "name_zh": "美元兑人民币",
       "status": "success"
@@ -132,18 +132,18 @@
       "status": "success"
     },
     {
+      "id": "T10YIE",
+      "name_zh": "10年盈亏平衡通胀",
+      "status": "failed"
+    },
+    {
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
+      "status": "failed"
+    },
+    {
       "id": "PCEPI",
       "name_zh": "PCE物价指数",
-      "status": "failed"
-    },
-    {
-      "id": "FEDFUNDS",
-      "name_zh": "联邦基金利率",
-      "status": "failed"
-    },
-    {
-      "id": "GVZCLS",
-      "name_zh": "黄金波动率",
       "status": "failed"
     }
   ]
