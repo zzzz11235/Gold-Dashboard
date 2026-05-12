@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-12T18:07:36.073Z",
+  "updated": "2026-05-12T20:45:05.454Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -112,6 +112,11 @@
       "status": "success"
     },
     {
+      "id": "GFDEBTN",
+      "name_zh": "联邦债务总额",
+      "status": "success"
+    },
+    {
       "id": "GFDEGDQ188S",
       "name_zh": "债务/GDP",
       "status": "success"
@@ -119,16 +124,6 @@
     {
       "id": "FYFSGDA188S",
       "name_zh": "财政赤字/GDP",
-      "status": "success"
-    },
-    {
-      "id": "FEDFUNDS",
-      "name_zh": "联邦基金利率",
-      "status": "success"
-    },
-    {
-      "id": "GVZCLS",
-      "name_zh": "黄金波动率",
       "status": "success"
     },
     {
@@ -142,8 +137,13 @@
       "status": "success"
     },
     {
-      "id": "GFDEBTN",
-      "name_zh": "联邦债务总额",
+      "id": "FEDFUNDS",
+      "name_zh": "联邦基金利率",
+      "status": "failed"
+    },
+    {
+      "id": "GVZCLS",
+      "name_zh": "黄金波动率",
       "status": "failed"
     }
   ]
