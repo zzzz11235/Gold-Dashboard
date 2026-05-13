@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-13T13:23:08.393Z",
+  "updated": "2026-05-13T16:27:28.553Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -129,22 +129,22 @@
     {
       "id": "FEDFUNDS",
       "name_zh": "联邦基金利率",
-      "status": "failed"
+      "status": "success"
     },
     {
       "id": "GVZCLS",
       "name_zh": "黄金波动率",
-      "status": "failed"
+      "status": "success"
     },
     {
       "id": "DEXCHUS",
       "name_zh": "美元兑人民币",
-      "status": "failed"
+      "status": "success"
     },
     {
       "id": "WALCL",
       "name_zh": "美联储总资产",
-      "status": "failed"
+      "status": "success"
     }
   ]
 }
