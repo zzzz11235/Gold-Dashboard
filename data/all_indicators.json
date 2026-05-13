@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-13T19:01:17.852Z",
+  "updated": "2026-05-13T21:41:03.303Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -77,6 +77,11 @@
       "status": "success"
     },
     {
+      "id": "DFII10",
+      "name_zh": "10年TIPS实际收益率",
+      "status": "success"
+    },
+    {
       "id": "DFII5",
       "name_zh": "5年TIPS实际收益率",
       "status": "success"
@@ -87,8 +92,18 @@
       "status": "success"
     },
     {
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
+      "status": "success"
+    },
+    {
       "id": "PCEPI",
       "name_zh": "PCE物价指数",
+      "status": "success"
+    },
+    {
+      "id": "IPMAN",
+      "name_zh": "工业生产指数",
       "status": "success"
     },
     {
@@ -107,39 +122,24 @@
       "status": "success"
     },
     {
+      "id": "FYFSGDA188S",
+      "name_zh": "财政赤字/GDP",
+      "status": "success"
+    },
+    {
       "id": "FEDFUNDS",
       "name_zh": "联邦基金利率",
       "status": "success"
     },
     {
-      "id": "DFII10",
-      "name_zh": "10年TIPS实际收益率",
-      "status": "failed"
-    },
-    {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
-      "status": "failed"
-    },
-    {
-      "id": "IPMAN",
-      "name_zh": "工业生产指数",
-      "status": "failed"
-    },
-    {
-      "id": "FYFSGDA188S",
-      "name_zh": "财政赤字/GDP",
-      "status": "failed"
-    },
-    {
       "id": "GVZCLS",
       "name_zh": "黄金波动率",
-      "status": "failed"
+      "status": "success"
     },
     {
       "id": "DEXCHUS",
       "name_zh": "美元兑人民币",
-      "status": "failed"
+      "status": "success"
     },
     {
       "id": "WALCL",
