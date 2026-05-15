@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-15T14:27:13.631Z",
+  "updated": "2026-05-15T16:56:15.206Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -97,6 +97,11 @@
       "status": "success"
     },
     {
+      "id": "PCEPI",
+      "name_zh": "PCE物价指数",
+      "status": "success"
+    },
+    {
       "id": "IPMAN",
       "name_zh": "工业生产指数",
       "status": "success"
@@ -140,11 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "PCEPI",
-      "name_zh": "PCE物价指数",
-      "status": "failed"
     }
   ]
 }
