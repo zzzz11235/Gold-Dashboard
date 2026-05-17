@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-17T21:03:43.721Z",
+  "updated": "2026-05-17T23:00:41.055Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -92,11 +92,6 @@
       "status": "success"
     },
     {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
-      "status": "success"
-    },
-    {
       "id": "PCEPI",
       "name_zh": "PCE物价指数",
       "status": "success"
@@ -145,6 +140,11 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
+    },
+    {
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
+      "status": "failed"
     }
   ]
 }
