@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-10T19:44:52.349Z",
+  "updated": "2026-07-10T21:13:52.506Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -17,8 +17,18 @@
       "status": "success"
     },
     {
+      "id": "SILVER_FUTURES",
+      "name_zh": "SILVER_FUTURES",
+      "status": "success"
+    },
+    {
       "id": "SP500_INDEX",
       "name_zh": "SP500_INDEX",
+      "status": "success"
+    },
+    {
+      "id": "GOLD_SILVER_RATIO",
+      "name_zh": "GOLD_SILVER_RATIO",
       "status": "success"
     },
     {
@@ -135,16 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "SILVER_FUTURES",
-      "name_zh": "SILVER_FUTURES",
-      "status": "failed"
-    },
-    {
-      "id": "GOLD_SILVER_RATIO",
-      "name_zh": "GOLD_SILVER_RATIO",
-      "status": "failed"
     }
   ]
 }
