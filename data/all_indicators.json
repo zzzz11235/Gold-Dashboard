@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-10T17:53:23.680Z",
+  "updated": "2026-07-10T19:44:52.349Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -17,18 +17,8 @@
       "status": "success"
     },
     {
-      "id": "SILVER_FUTURES",
-      "name_zh": "SILVER_FUTURES",
-      "status": "success"
-    },
-    {
       "id": "SP500_INDEX",
       "name_zh": "SP500_INDEX",
-      "status": "success"
-    },
-    {
-      "id": "GOLD_SILVER_RATIO",
-      "name_zh": "GOLD_SILVER_RATIO",
       "status": "success"
     },
     {
@@ -39,6 +29,11 @@
     {
       "id": "OIL_FUTURES",
       "name_zh": "OIL_FUTURES",
+      "status": "success"
+    },
+    {
+      "id": "BITCOIN_USD",
+      "name_zh": "BITCOIN_USD",
       "status": "success"
     },
     {
@@ -142,8 +137,13 @@
       "status": "success"
     },
     {
-      "id": "BITCOIN_USD",
-      "name_zh": "BITCOIN_USD",
+      "id": "SILVER_FUTURES",
+      "name_zh": "SILVER_FUTURES",
+      "status": "failed"
+    },
+    {
+      "id": "GOLD_SILVER_RATIO",
+      "name_zh": "GOLD_SILVER_RATIO",
       "status": "failed"
     }
   ]
