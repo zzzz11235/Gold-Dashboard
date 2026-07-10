@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-10T15:36:53.407Z",
+  "updated": "2026-07-10T17:53:23.680Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -39,11 +39,6 @@
     {
       "id": "OIL_FUTURES",
       "name_zh": "OIL_FUTURES",
-      "status": "success"
-    },
-    {
-      "id": "BITCOIN_USD",
-      "name_zh": "BITCOIN_USD",
       "status": "success"
     },
     {
@@ -145,6 +140,11 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
+    },
+    {
+      "id": "BITCOIN_USD",
+      "name_zh": "BITCOIN_USD",
+      "status": "failed"
     }
   ]
 }
