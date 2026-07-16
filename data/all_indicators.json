@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-16T00:08:10.116Z",
+  "updated": "2026-07-16T04:14:14.206Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -92,6 +92,11 @@
       "status": "success"
     },
     {
+      "id": "DTWEXBGS",
+      "name_zh": "美元指数",
+      "status": "success"
+    },
+    {
       "id": "PCEPI",
       "name_zh": "PCE物价指数",
       "status": "success"
@@ -117,6 +122,11 @@
       "status": "success"
     },
     {
+      "id": "FYFSGDA188S",
+      "name_zh": "财政赤字/GDP",
+      "status": "success"
+    },
+    {
       "id": "FEDFUNDS",
       "name_zh": "联邦基金利率",
       "status": "success"
@@ -135,16 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "DTWEXBGS",
-      "name_zh": "美元指数",
-      "status": "failed"
-    },
-    {
-      "id": "FYFSGDA188S",
-      "name_zh": "财政赤字/GDP",
-      "status": "failed"
     }
   ]
 }
