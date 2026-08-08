@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-08T20:43:07.864Z",
+  "updated": "2026-08-08T21:37:54.999Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -117,6 +117,11 @@
       "status": "success"
     },
     {
+      "id": "GFDEGDQ188S",
+      "name_zh": "债务/GDP",
+      "status": "success"
+    },
+    {
       "id": "FYFSGDA188S",
       "name_zh": "财政赤字/GDP",
       "status": "success"
@@ -140,11 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "GFDEGDQ188S",
-      "name_zh": "债务/GDP",
-      "status": "failed"
     }
   ]
 }
