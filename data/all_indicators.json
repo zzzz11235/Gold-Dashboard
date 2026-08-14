@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-14T14:59:22.642Z",
+  "updated": "2026-08-14T16:02:39.591Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -107,11 +107,6 @@
       "status": "success"
     },
     {
-      "id": "UNRATE",
-      "name_zh": "失业率",
-      "status": "success"
-    },
-    {
       "id": "GFDEBTN",
       "name_zh": "联邦债务总额",
       "status": "success"
@@ -145,6 +140,11 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
+    },
+    {
+      "id": "UNRATE",
+      "name_zh": "失业率",
+      "status": "failed"
     }
   ]
 }
