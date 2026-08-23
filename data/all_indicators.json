@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-23T12:54:19.758Z",
+  "updated": "2026-08-23T13:38:03.029Z",
   "indicators": [
     {
       "id": "GOLD_FUTURES",
@@ -37,8 +37,18 @@
       "status": "success"
     },
     {
+      "id": "OIL_FUTURES",
+      "name_zh": "OIL_FUTURES",
+      "status": "success"
+    },
+    {
       "id": "BITCOIN_USD",
       "name_zh": "BITCOIN_USD",
+      "status": "success"
+    },
+    {
+      "id": "GOLD_OIL_RATIO",
+      "name_zh": "GOLD_OIL_RATIO",
       "status": "success"
     },
     {
@@ -135,16 +145,6 @@
       "id": "WALCL",
       "name_zh": "美联储总资产",
       "status": "success"
-    },
-    {
-      "id": "OIL_FUTURES",
-      "name_zh": "OIL_FUTURES",
-      "status": "failed"
-    },
-    {
-      "id": "GOLD_OIL_RATIO",
-      "name_zh": "GOLD_OIL_RATIO",
-      "status": "failed"
     }
   ]
 }
